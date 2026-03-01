@@ -11,7 +11,7 @@ interface CourseCalendarProps {
 }
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-const TIME_SLOTS = ["9:00–10:30", "11:00–12:30", "2:00–3:30", "4:00–5:30"];
+const TIME_SLOTS = ["9:00–10:30", "11:00–12:30", "2:00–3:30", "4:00–5:30", "6:00–7:30"];
 
 const REQUIRED_STYLE = {
   bg: "bg-[hsl(var(--course-required-bg))]",
