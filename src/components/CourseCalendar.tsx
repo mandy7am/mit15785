@@ -12,23 +12,20 @@ interface CourseCalendarProps {
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 const TIME_SLOTS = ["9:00–10:30", "11:00–12:30", "2:00–3:30", "4:00–5:30"];
 
-const CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string }> = {
-  Finance:    { bg: "bg-[hsl(var(--course-finance-bg))]",    border: "border-[hsl(var(--course-finance-border))]",    text: "text-[hsl(var(--course-finance))]" },
-  Marketing:  { bg: "bg-[hsl(var(--course-marketing-bg))]",  border: "border-[hsl(var(--course-marketing-border))]",  text: "text-[hsl(var(--course-marketing))]" },
-  Operations: { bg: "bg-[hsl(var(--course-operations-bg))]", border: "border-[hsl(var(--course-operations-border))]", text: "text-[hsl(var(--course-operations))]" },
-  Technology: { bg: "bg-[hsl(var(--course-technology-bg))]", border: "border-[hsl(var(--course-technology-border))]", text: "text-[hsl(var(--course-technology))]" },
-  Leadership: { bg: "bg-[hsl(var(--course-leadership-bg))]", border: "border-[hsl(var(--course-leadership-border))]", text: "text-[hsl(var(--course-leadership))]" },
-};
-
 const REQUIRED_STYLE = {
   bg: "bg-[hsl(var(--course-required-bg))]",
   border: "border-[hsl(var(--course-required-border))]",
   text: "text-[hsl(var(--course-required))]",
 };
 
+const ELECTIVE_STYLE = {
+  bg: "bg-accent",
+  border: "border-accent",
+  text: "text-accent-foreground",
+};
+
 const getCategoryStyle = (course: Course) => {
-  if (course.isRequired) return REQUIRED_STYLE;
-  return CATEGORY_STYLES[course.category || ""] || CATEGORY_STYLES.Technology;
+  return course.isRequired ? REQUIRED_STYLE : ELECTIVE_STYLE;
 };
 
 const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: CourseCalendarProps) => {
@@ -97,7 +94,7 @@ const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: C
                         variant="outline"
                         className={`text-[10px] px-1.5 py-0 ${style.text} border-current`}
                       >
-                        {course.isRequired ? "Core" : course.category}
+                        {course.isRequired ? "Core" : "Elective"}
                       </Badge>
                     </div>
                     <span className="text-xs text-foreground leading-tight font-medium">
@@ -116,27 +113,11 @@ const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: C
       <div className="flex flex-wrap items-center gap-4 mt-6 pt-4 border-t border-border">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded bg-[hsl(var(--course-required-bg))] border border-[hsl(var(--course-required-border))]" />
-          <span className="text-xs text-muted-foreground">Required Core</span>
+          <span className="text-xs text-muted-foreground">Core</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-[hsl(var(--course-finance-bg))] border border-[hsl(var(--course-finance-border))]" />
-          <span className="text-xs text-muted-foreground">Finance</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-[hsl(var(--course-marketing-bg))] border border-[hsl(var(--course-marketing-border))]" />
-          <span className="text-xs text-muted-foreground">Marketing</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-[hsl(var(--course-technology-bg))] border border-[hsl(var(--course-technology-border))]" />
-          <span className="text-xs text-muted-foreground">Technology</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-[hsl(var(--course-operations-bg))] border border-[hsl(var(--course-operations-border))]" />
-          <span className="text-xs text-muted-foreground">Operations</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-[hsl(var(--course-leadership-bg))] border border-[hsl(var(--course-leadership-border))]" />
-          <span className="text-xs text-muted-foreground">Leadership</span>
+          <div className="w-3 h-3 rounded bg-accent border border-accent" />
+          <span className="text-xs text-muted-foreground">Elective</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded border border-dashed border-border" />
