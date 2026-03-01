@@ -66,15 +66,24 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
     }
   };
 
-  const handleCourseFile = (file: File | null) => {
-    setCoursesFile(file);
-    if (file) {
-      setCourseScanning(true);
-      setTimeout(() => setCourseScanning(false), 2500);
+  const handleSyncCatalog = async () => {
+    setCatalogSyncing(true);
+    setCatalogError("");
+    try {
+      const { data, error } = await supabase.functions.invoke("sync-mit-catalog");
+      if (error) throw error;
+      if (data?.success) {
+        setCatalogSynced(true);
+        setCatalogCount(data.count || 0);
+      } else {
+        setCatalogError(data?.error || "Sync failed");
+      }
+    } catch (err: any) {
+      setCatalogError(err.message || "Failed to sync catalog");
+    } finally {
+      setCatalogSyncing(false);
     }
   };
-
-  const handleTagClick = (tag: string) => {
     setCareerGoals(prev => {
       if (prev.includes(tag)) return prev;
       return prev ? `${prev}, ${tag}` : tag;
