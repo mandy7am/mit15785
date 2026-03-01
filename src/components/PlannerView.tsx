@@ -117,21 +117,8 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               />
             </Card>
 
-            {/* Summary stats */}
-            <div className="grid grid-cols-3 gap-4">
-              <Card className="p-4 text-center">
-                <p className="text-2xl font-display text-primary">{REQUIRED_COURSES.length}</p>
-                <p className="text-xs text-muted-foreground mt-1">Core Courses</p>
-              </Card>
-              <Card className="p-4 text-center">
-                <p className="text-2xl font-display text-primary">{selectedElectives.length}</p>
-                <p className="text-xs text-muted-foreground mt-1">Electives</p>
-              </Card>
-              <Card className="p-4 text-center">
-                <p className="text-2xl font-display text-primary">{totalCredits}</p>
-                <p className="text-xs text-muted-foreground mt-1">Total Credits</p>
-              </Card>
-            </div>
+
+
 
             {/* Download button - visible when a bundle is applied */}
             {selectedBundleId && (
