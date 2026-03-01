@@ -87,7 +87,11 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
 
   const handleTagClick = (tag: string) => {
     setCareerGoals(prev => {
-      if (prev.includes(tag)) return prev;
+      // Check if tag is already selected — if so, remove it
+      const tags = prev.split(", ").filter(t => t.trim() !== "");
+      if (tags.includes(tag)) {
+        return tags.filter(t => t !== tag).join(", ");
+      }
       return prev ? `${prev}, ${tag}` : tag;
     });
   };
