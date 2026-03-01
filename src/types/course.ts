@@ -9,6 +9,7 @@ export interface Course {
   isRequired: boolean;
   category?: string;
   semester?: string;
+  aiReason?: string;
 }
 
 export interface CourseBundle {

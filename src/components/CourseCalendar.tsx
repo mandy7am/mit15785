@@ -1,4 +1,4 @@
-import { Course } from "@/types/course";
+import { Course, CourseBundle } from "@/types/course";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock } from "lucide-react";
@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 interface CourseCalendarProps {
   requiredCourses: Course[];
   selectedElectives: Course[];
+  hoveredBundle?: CourseBundle | null;
   onCourseClick?: (course: Course) => void;
 }
 
@@ -28,22 +29,24 @@ const getCategoryStyle = (course: Course) => {
   return course.isRequired ? REQUIRED_STYLE : ELECTIVE_STYLE;
 };
 
-const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: CourseCalendarProps) => {
+const CourseCalendar = ({ requiredCourses, selectedElectives, hoveredBundle, onCourseClick }: CourseCalendarProps) => {
   const allCourses = [...requiredCourses, ...selectedElectives];
 
   const getCourse = (day: string, timeSlot: string): Course | undefined => {
     return allCourses.find((c) => {
       if (c.timeSlot !== timeSlot) return false;
-      // "Mon/Wed" should match both "Mon" and "Wed"
       const courseDays = c.day?.split("/") || [];
       return courseDays.includes(day);
     });
   };
 
-  // Check if a course spans this day as part of a multi-day pair (for visual spanning)
-  const isFirstDayOfPair = (day: string, course: Course): boolean => {
-    const courseDays = course.day?.split("/") || [];
-    return courseDays[0] === day;
+  const getGhostCourse = (day: string, timeSlot: string): Course | undefined => {
+    if (!hoveredBundle) return undefined;
+    return hoveredBundle.courses.find((c) => {
+      if (c.timeSlot !== timeSlot) return false;
+      const courseDays = c.day?.split("/") || [];
+      return courseDays.includes(day);
+    });
   };
 
   return (
@@ -70,6 +73,20 @@ const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: C
             </div>
             {DAYS.map((day) => {
               const course = getCourse(day, timeSlot);
+              const ghost = !course ? getGhostCourse(day, timeSlot) : undefined;
+
+              if (ghost) {
+                return (
+                  <div
+                    key={`${day}-${timeSlot}`}
+                    className="p-3 rounded-lg border border-primary/30 bg-primary/8 min-h-[80px] flex flex-col justify-center transition-all duration-300 animate-fade-in"
+                  >
+                    <span className="text-xs font-medium text-primary/60">{ghost.code}</span>
+                    <span className="text-[11px] text-primary/50 leading-tight mt-0.5">{ghost.title}</span>
+                  </div>
+                );
+              }
+
               if (!course) {
                 return (
                   <div

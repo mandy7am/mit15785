@@ -38,8 +38,9 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(profile.careerGoals);
   const [requirements, setRequirements] = useState(DEFAULT_REQUIREMENTS);
-  const [sidebarTab, setSidebarTab] = useState<"tracks" | "audit">("tracks");
+  const [sidebarTab, setSidebarTab] = useState<"bundles" | "audit">("bundles");
   const [showGuide, setShowGuide] = useState(true);
+  const [hoveredBundle, setHoveredBundle] = useState<CourseBundle | null>(null);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
   const selectedElectives = selectedBundle?.courses || [];
@@ -47,6 +48,12 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const totalCredits =
     REQUIRED_COURSES.reduce((s, c) => s + c.credits, 0) +
     selectedElectives.reduce((s, c) => s + c.credits, 0);
+
+  const dreamRoleLabel = profile.careerGoals
+    ? profile.careerGoals.length > 40
+      ? profile.careerGoals.slice(0, 40) + "…"
+      : profile.careerGoals
+    : "Your Goals";
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,7 +88,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                 <h2 className="text-2xl font-display text-foreground">Fall Semester</h2>
               </div>
               <p className="text-sm text-muted-foreground">
-                Required courses are pre-filled. Select a track to fill remaining slots.
+                Required courses are pre-filled. Select a bundle to fill remaining slots.
               </p>
             </div>
 
@@ -89,6 +96,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               <CourseCalendar
                 requiredCourses={REQUIRED_COURSES}
                 selectedElectives={selectedElectives}
+                hoveredBundle={hoveredBundle}
               />
             </Card>
 
@@ -109,20 +117,20 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
             </div>
           </div>
 
-          {/* Sidebar - toggle between tracks & audit */}
+          {/* Sidebar */}
           <div className="space-y-6">
             {/* Toggle buttons */}
             <div className="flex rounded-lg bg-muted p-1 gap-1">
               <button
-                onClick={() => setSidebarTab("tracks")}
+                onClick={() => setSidebarTab("bundles")}
                 className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  sidebarTab === "tracks"
+                  sidebarTab === "bundles"
                     ? "bg-card text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <Sparkles className="w-4 h-4" />
-                Tracks
+                Bundles
               </button>
               <button
                 onClick={() => setSidebarTab("audit")}
@@ -137,12 +145,15 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               </button>
             </div>
 
-            {sidebarTab === "tracks" ? (
+            {sidebarTab === "bundles" ? (
               <>
                 <div>
-                  <h2 className="text-2xl font-display text-foreground">Suggested Tracks</h2>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-display text-foreground">AI-Curated Bundles</h2>
+                    <Sparkles className="w-4 h-4 text-primary" />
+                  </div>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Based on your goals, here are curated elective bundles.
+                    for <span className="font-medium text-foreground">{dreamRoleLabel}</span>
                   </p>
                 </div>
 
@@ -159,11 +170,11 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                       <Lightbulb className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                       <div className="space-y-1.5 pr-4">
                         <p className="text-sm font-medium text-foreground">
-                          These tracks are AI-curated for you
+                          These bundles are AI-curated for you
                         </p>
                         <p className="text-xs text-muted-foreground leading-relaxed">
-                          Explore the elective bundles below — each one is tailored to a career path. Click a track to preview its courses on your calendar, then{" "}
-                          <span className="font-medium text-foreground">commit to the one that fits</span>.
+                          Explore the elective bundles below — each one is tailored to a career path. Hover to preview on your calendar, click a course to see why it fits, then{" "}
+                          <span className="font-medium text-foreground">apply the bundle that works</span>.
                         </p>
                       </div>
                     </div>
@@ -192,6 +203,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                       onSelect={(b) =>
                         setSelectedBundleId(selectedBundleId === b.id ? null : b.id)
                       }
+                      onHover={setHoveredBundle}
                     />
                   ))}
                 </div>
