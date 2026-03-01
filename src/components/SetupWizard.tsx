@@ -23,7 +23,7 @@ const ROLE_TAGS = [
   "Operations", "Data Science", "Investment Banking",
 ];
 
-const YEARS = ["2025", "2026", "2027"];
+const YEARS = ["2026", "2027"];
 
 const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
   const [step, setStep] = useState(0);
