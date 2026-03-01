@@ -84,6 +84,8 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
       setCatalogSyncing(false);
     }
   };
+
+  const handleTagClick = (tag: string) => {
     setCareerGoals(prev => {
       if (prev.includes(tag)) return prev;
       return prev ? `${prev}, ${tag}` : tag;
