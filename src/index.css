@@ -49,6 +49,26 @@
     --forest: 152 32% 40%;
     --forest-light: 152 25% 75%;
     --forest-mist: 152 15% 92%;
+
+    /* Course category colors */
+    --course-required: 0 55% 55%;
+    --course-required-bg: 0 50% 95%;
+    --course-required-border: 0 45% 82%;
+    --course-finance: 220 65% 55%;
+    --course-finance-bg: 220 60% 95%;
+    --course-finance-border: 220 50% 82%;
+    --course-marketing: 280 50% 55%;
+    --course-marketing-bg: 280 45% 95%;
+    --course-marketing-border: 280 40% 82%;
+    --course-operations: 35 75% 50%;
+    --course-operations-bg: 35 70% 94%;
+    --course-operations-border: 35 55% 80%;
+    --course-technology: 170 55% 42%;
+    --course-technology-bg: 170 45% 93%;
+    --course-technology-border: 170 40% 78%;
+    --course-leadership: 310 45% 52%;
+    --course-leadership-bg: 310 40% 95%;
+    --course-leadership-border: 310 35% 82%;
     --wood: 30 30% 55%;
     --wood-light: 35 35% 85%;
     --cream: 40 33% 96%;
