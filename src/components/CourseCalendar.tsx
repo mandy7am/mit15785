@@ -2,12 +2,16 @@ import { Course, CourseBundle } from "@/types/course";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useMemo } from "react";
 
 interface CourseCalendarProps {
   requiredCourses: Course[];
   selectedElectives: Course[];
   hoveredBundle?: CourseBundle | null;
   onCourseClick?: (course: Course) => void;
+  /** Keys of recently-added elective IDs for stagger animation */
+  animatingIds?: Set<string>;
 }
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -29,16 +33,30 @@ const getCategoryStyle = (course: Course) => {
   return course.isRequired ? REQUIRED_STYLE : ELECTIVE_STYLE;
 };
 
-const CourseCalendar = ({ requiredCourses, selectedElectives, hoveredBundle, onCourseClick }: CourseCalendarProps) => {
+const CourseCalendar = ({
+  requiredCourses,
+  selectedElectives,
+  hoveredBundle,
+  onCourseClick,
+  animatingIds,
+}: CourseCalendarProps) => {
   const allCourses = [...requiredCourses, ...selectedElectives];
 
-  const getCourse = (day: string, timeSlot: string): Course | undefined => {
-    return allCourses.find((c) => {
-      if (c.timeSlot !== timeSlot) return false;
-      const courseDays = c.day?.split("/") || [];
-      return courseDays.includes(day);
-    });
-  };
+  // Build a lookup: (day, timeSlot) → Course[]
+  const slotMap = useMemo(() => {
+    const map = new Map<string, Course[]>();
+    for (const c of allCourses) {
+      if (!c.timeSlot || !c.day) continue;
+      const days = c.day.split("/");
+      for (const d of days) {
+        const key = `${d}|${c.timeSlot}`;
+        const arr = map.get(key) || [];
+        arr.push(c);
+        map.set(key, arr);
+      }
+    }
+    return map;
+  }, [allCourses]);
 
   const getGhostCourse = (day: string, timeSlot: string): Course | undefined => {
     if (!hoveredBundle) return undefined;
@@ -49,85 +67,139 @@ const CourseCalendar = ({ requiredCourses, selectedElectives, hoveredBundle, onC
     });
   };
 
+  const renderCourseBlock = (course: Course, index: number, splitCount: number) => {
+    const style = getCategoryStyle(course);
+    const isAnimating = animatingIds?.has(course.id);
+    const elIdx = selectedElectives.findIndex((e) => e.id === course.id);
+
+    const block = (
+      <Card
+        onClick={() => onCourseClick?.(course)}
+        className={`p-2.5 cursor-pointer transition-all duration-200 hover:shadow-md ${style.bg} ${style.border} ${
+          splitCount > 1 ? "min-h-[70px]" : "min-h-[80px]"
+        } flex flex-col justify-center`}
+        style={splitCount > 1 ? { flex: `1 1 ${100 / splitCount}%` } : undefined}
+      >
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-center justify-between">
+            <span className={`text-xs font-medium ${style.text}`}>{course.code}</span>
+            <Badge
+              variant="outline"
+              className={`text-[10px] px-1.5 py-0 ${style.text} border-current`}
+            >
+              {course.isRequired ? "Core" : "Elective"}
+            </Badge>
+          </div>
+          <span className="text-xs text-foreground leading-tight font-medium">
+            {course.title}
+          </span>
+          <span className="text-[10px] text-muted-foreground">{course.credits} cr</span>
+        </div>
+      </Card>
+    );
+
+    if (isAnimating) {
+      return (
+        <motion.div
+          key={course.id}
+          initial={{ opacity: 0, y: 24, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -16, scale: 0.95 }}
+          transition={{ delay: elIdx * 0.12, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={splitCount > 1 ? { flex: `1 1 ${100 / splitCount}%` } : undefined}
+        >
+          {block}
+        </motion.div>
+      );
+    }
+
+    return (
+      <div
+        key={course.id}
+        style={splitCount > 1 ? { flex: `1 1 ${100 / splitCount}%` } : undefined}
+      >
+        {block}
+      </div>
+    );
+  };
+
   return (
     <div className="w-full overflow-x-auto">
-      <div className="min-w-[700px]">
+      <div className="min-w-[600px]">
         {/* Header */}
-        <div className="grid grid-cols-6 gap-2 mb-2">
-          <div className="p-3 flex items-center gap-2 text-sm font-medium text-muted-foreground">
+        <div className="grid grid-cols-6 gap-1.5 mb-1.5">
+          <div className="p-2.5 flex items-center gap-2 text-sm font-medium text-muted-foreground">
             <Clock className="w-4 h-4" />
             Time
           </div>
           {DAYS.map((day) => (
-            <div key={day} className="p-3 text-center text-sm font-medium text-foreground">
+            <div key={day} className="p-2.5 text-center text-sm font-medium text-foreground">
               {day}
             </div>
           ))}
         </div>
 
         {/* Time slots */}
-        {TIME_SLOTS.map((timeSlot) => (
-          <div key={timeSlot} className="grid grid-cols-6 gap-2 mb-2">
-            <div className="p-3 text-sm text-muted-foreground flex items-center">
-              {timeSlot}
-            </div>
-            {DAYS.map((day) => {
-              const course = getCourse(day, timeSlot);
-              const ghost = !course ? getGhostCourse(day, timeSlot) : undefined;
+        <AnimatePresence mode="sync">
+          {TIME_SLOTS.map((timeSlot) => (
+            <div key={timeSlot} className="grid grid-cols-6 gap-1.5 mb-1.5">
+              <div className="p-2.5 text-sm text-muted-foreground flex items-center">
+                {timeSlot}
+              </div>
+              {DAYS.map((day) => {
+                const key = `${day}|${timeSlot}`;
+                const courses = slotMap.get(key) || [];
+                const ghost = courses.length === 0 ? getGhostCourse(day, timeSlot) : undefined;
 
-              if (ghost) {
-                return (
-                  <div
-                    key={`${day}-${timeSlot}`}
-                    className="p-3 rounded-lg border border-primary/30 bg-primary/8 min-h-[80px] flex flex-col justify-center transition-all duration-300 animate-fade-in"
-                  >
-                    <span className="text-xs font-medium text-primary/60">{ghost.code}</span>
-                    <span className="text-[11px] text-primary/50 leading-tight mt-0.5">{ghost.title}</span>
-                  </div>
-                );
-              }
-
-              if (!course) {
-                return (
-                  <div
-                    key={`${day}-${timeSlot}`}
-                    className="p-3 rounded-lg border border-dashed border-border/60 min-h-[80px] flex items-center justify-center"
-                  >
-                    <span className="text-xs text-muted-foreground/50">Open</span>
-                  </div>
-                );
-              }
-              const style = getCategoryStyle(course);
-              return (
-                <Card
-                  key={`${day}-${timeSlot}`}
-                  onClick={() => onCourseClick?.(course)}
-                  className={`p-3 min-h-[80px] cursor-pointer transition-all duration-200 hover:shadow-md ${style.bg} ${style.border}`}
-                >
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center justify-between">
-                      <span className={`text-xs font-medium ${style.text}`}>{course.code}</span>
-                      <Badge
-                        variant="outline"
-                        className={`text-[10px] px-1.5 py-0 ${style.text} border-current`}
-                      >
-                        {course.isRequired ? "Core" : "Elective"}
-                      </Badge>
+                if (ghost) {
+                  return (
+                    <div
+                      key={`${day}-${timeSlot}`}
+                      className="p-2.5 rounded-lg border border-primary/30 bg-primary/8 min-h-[80px] flex flex-col justify-center transition-all duration-300 animate-fade-in"
+                    >
+                      <span className="text-xs font-medium text-primary/60">{ghost.code}</span>
+                      <span className="text-[11px] text-primary/50 leading-tight mt-0.5">{ghost.title}</span>
                     </div>
-                    <span className="text-xs text-foreground leading-tight font-medium">
-                      {course.title}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground">{course.credits} credits</span>
+                  );
+                }
+
+                if (courses.length === 0) {
+                  return (
+                    <div
+                      key={`${day}-${timeSlot}`}
+                      className="p-2.5 rounded-lg border border-dashed border-border/60 min-h-[80px] flex items-center justify-center"
+                    >
+                      <span className="text-xs text-muted-foreground/50">Open</span>
+                    </div>
+                  );
+                }
+
+                // Single or split-column for conflicts
+                if (courses.length === 1) {
+                  return (
+                    <div key={`${day}-${timeSlot}`}>
+                      {renderCourseBlock(courses[0], 0, 1)}
+                    </div>
+                  );
+                }
+
+                // Multiple courses → split-column
+                return (
+                  <div
+                    key={`${day}-${timeSlot}`}
+                    className="flex gap-1 min-h-[80px]"
+                  >
+                    {courses.map((c, i) => renderCourseBlock(c, i, courses.length))}
                   </div>
-                </Card>
-              );
-            })}
-          </div>
-        ))}
+                );
+              })}
+            </div>
+          ))}
+        </AnimatePresence>
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center gap-4 mt-6 pt-4 border-t border-border">
+      <div className="flex flex-wrap items-center gap-4 mt-4 pt-3 border-t border-border">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded bg-[hsl(var(--course-required-bg))] border border-[hsl(var(--course-required-border))]" />
           <span className="text-xs text-muted-foreground">Core</span>
@@ -139,6 +211,10 @@ const CourseCalendar = ({ requiredCourses, selectedElectives, hoveredBundle, onC
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded border border-dashed border-border" />
           <span className="text-xs text-muted-foreground">Open Slot</span>
+        </div>
+        <div className="flex items-center gap-1.5 ml-auto">
+          <div className="w-3 h-3 rounded bg-primary/10 border border-primary/30" />
+          <span className="text-xs text-muted-foreground">Conflict (split view)</span>
         </div>
       </div>
     </div>
