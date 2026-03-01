@@ -30,7 +30,7 @@ const PlannerView = ({ profile, onBack }: PlannerViewProps) => {
   const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(profile.careerGoals);
   const [requirements, setRequirements] = useState(DEFAULT_REQUIREMENTS);
-  const [showBundles, setShowBundles] = useState(true);
+  const [sidebarTab, setSidebarTab] = useState<"tracks" | "audit">("tracks");
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
   const selectedElectives = selectedBundle?.courses || [];
@@ -104,76 +104,98 @@ const PlannerView = ({ profile, onBack }: PlannerViewProps) => {
             </div>
           </div>
 
-          {/* Sidebar - course bundles */}
+          {/* Sidebar - toggle between tracks & audit */}
           <div className="space-y-6">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-5 h-5 text-primary" />
-                <h2 className="text-2xl font-display text-foreground">Suggested Tracks</h2>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Based on your goals, here are curated elective bundles.
-              </p>
+            {/* Toggle buttons */}
+            <div className="flex rounded-lg bg-muted p-1 gap-1">
+              <button
+                onClick={() => setSidebarTab("tracks")}
+                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  sidebarTab === "tracks"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+                Tracks
+              </button>
+              <button
+                onClick={() => setSidebarTab("audit")}
+                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  sidebarTab === "audit"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <ClipboardCheck className="w-4 h-4" />
+                Degree Audit
+              </button>
             </div>
 
-            {/* Career prompt */}
-            <Card className="p-4 bg-forest-mist border-forest-light/30">
-              <div className="flex items-start gap-3">
-                <Textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Describe your target role or industry..."
-                  className="min-h-[60px] text-sm resize-none bg-card border-border"
-                />
-              </div>
-              <Button size="sm" className="mt-3 gap-2 w-full">
-                <RefreshCw className="w-3 h-3" />
-                Update Recommendations
-              </Button>
-            </Card>
+            {sidebarTab === "tracks" ? (
+              <>
+                <div>
+                  <h2 className="text-2xl font-display text-foreground">Suggested Tracks</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Based on your goals, here are curated elective bundles.
+                  </p>
+                </div>
 
-            {/* Bundle cards */}
-            <div className="space-y-4">
-              {SAMPLE_BUNDLES.map((bundle) => (
-                <CourseBundleCard
-                  key={bundle.id}
-                  bundle={bundle}
-                  isSelected={selectedBundleId === bundle.id}
-                  onSelect={(b) =>
-                    setSelectedBundleId(selectedBundleId === b.id ? null : b.id)
-                  }
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+                <Card className="p-4 bg-forest-mist border-forest-light/30">
+                  <Textarea
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="Describe your target role or industry..."
+                    className="min-h-[60px] text-sm resize-none bg-card border-border"
+                  />
+                  <Button size="sm" className="mt-3 gap-2 w-full">
+                    <RefreshCw className="w-3 h-3" />
+                    Update Recommendations
+                  </Button>
+                </Card>
 
-        {/* Degree Audit */}
-        <div className="mt-12 pt-8 border-t border-border">
-          <div className="flex items-center gap-2 mb-4">
-            <ClipboardCheck className="w-5 h-5 text-primary" />
-            <h2 className="text-2xl font-display text-foreground">Degree Audit</h2>
+                <div className="space-y-4">
+                  {SAMPLE_BUNDLES.map((bundle) => (
+                    <CourseBundleCard
+                      key={bundle.id}
+                      bundle={bundle}
+                      isSelected={selectedBundleId === bundle.id}
+                      onSelect={(b) =>
+                        setSelectedBundleId(selectedBundleId === b.id ? null : b.id)
+                      }
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <h2 className="text-2xl font-display text-foreground">Degree Audit</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Click a course to mark it as completed.
+                  </p>
+                </div>
+
+                <DegreeAudit
+                  requirements={requirements}
+                  onToggle={(catIdx, courseIdx) => {
+                    setRequirements((prev) =>
+                      prev.map((cat, ci) =>
+                        ci !== catIdx
+                          ? cat
+                          : {
+                              ...cat,
+                              courses: cat.courses.map((c, coIdx) =>
+                                coIdx === courseIdx ? { ...c, completed: !c.completed } : c
+                              ),
+                            }
+                      )
+                    );
+                  }}
+                />
+              </>
+            )}
           </div>
-          <p className="text-sm text-muted-foreground mb-6">
-            Click a course to mark it as completed. Track your progress toward graduation.
-          </p>
-          <DegreeAudit
-            requirements={requirements}
-            onToggle={(catIdx, courseIdx) => {
-              setRequirements((prev) => {
-                const updated = prev.map((cat, ci) => {
-                  if (ci !== catIdx) return cat;
-                  return {
-                    ...cat,
-                    courses: cat.courses.map((c, coIdx) =>
-                      coIdx === courseIdx ? { ...c, completed: !c.completed } : c
-                    ),
-                  };
-                });
-                return updated;
-              });
-            }}
-          />
         </div>
       </div>
     </div>
