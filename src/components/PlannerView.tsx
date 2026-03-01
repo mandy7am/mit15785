@@ -9,24 +9,27 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import SettingsModal from "./SettingsModal";
 import {
   TreePine,
   Calendar,
   Sparkles,
   Send,
   BookOpen,
-  ArrowLeft,
   GraduationCap,
   RefreshCw,
   ClipboardCheck,
 } from "lucide-react";
 
-interface PlannerViewProps {
-  profile: StudentProfile;
-  onBack: () => void;
-}
+const DEFAULT_PROFILE: StudentProfile = {
+  program: "MBA",
+  graduationYear: "2026",
+  careerGoals: "",
+  interests: [],
+};
 
-const PlannerView = ({ profile, onBack }: PlannerViewProps) => {
+const PlannerView = () => {
+  const [profile, setProfile] = useState<StudentProfile>(DEFAULT_PROFILE);
   const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(profile.careerGoals);
   const [requirements, setRequirements] = useState(DEFAULT_REQUIREMENTS);
