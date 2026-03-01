@@ -196,6 +196,7 @@ const PlannerView = ({ profile, onBack }: PlannerViewProps) => {
               </>
             )}
           </div>
+        </div>
       </div>
     </div>
   );
