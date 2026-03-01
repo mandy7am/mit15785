@@ -132,6 +132,18 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                 <p className="text-xs text-muted-foreground mt-1">Total Credits</p>
               </Card>
             </div>
+
+            {/* Download button - visible when a bundle is applied */}
+            {selectedBundleId && (
+              <Button
+                onClick={handleDownloadSchedule}
+                variant="outline"
+                className="w-full gap-2 animate-fade-in"
+              >
+                <Download className="w-4 h-4" />
+                Download Schedule (.csv)
+              </Button>
+            )}
           </div>
 
           {/* Sidebar */}
