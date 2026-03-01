@@ -104,17 +104,23 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                 className="mt-2"
               />
             </div>
-            <div className="pt-2">
-              <Label className="text-sm font-medium">Career aspirations (optional)</Label>
-              <Textarea
-                value={careerGoals}
-                onChange={(e) => setCareerGoals(e.target.value)}
-                placeholder="e.g., Transitioning from engineering to product management at a tech company..."
-                className="mt-2 min-h-[80px] resize-none"
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                Helps us suggest elective tracks tailored to your goals.
-              </p>
+            <div className="pt-4">
+              <div className="rounded-xl border border-primary/20 bg-primary/5 p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-primary" />
+                  <Label className="text-sm font-medium text-foreground">What's your dream role?</Label>
+                  <span className="text-xs text-muted-foreground ml-auto">optional</span>
+                </div>
+                <Textarea
+                  value={careerGoals}
+                  onChange={(e) => setCareerGoals(e.target.value)}
+                  placeholder="e.g., Leading product strategy at a climate tech startup, becoming a venture capitalist, launching my own company..."
+                  className="min-h-[80px] resize-none bg-card/80 border-border/50 focus:border-primary/40"
+                />
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  ✨ We'll use this to curate elective tracks tailored to your ambitions.
+                </p>
+              </div>
             </div>
           </div>
         )}
