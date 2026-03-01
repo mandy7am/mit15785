@@ -3,6 +3,7 @@ import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { StudentProfile } from "@/types/course";
 
@@ -23,6 +24,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
   const [step, setStep] = useState(0);
   const [program, setProgram] = useState("");
   const [graduationYear, setGraduationYear] = useState("2026");
+  const [careerGoals, setCareerGoals] = useState("");
   const [requirementsFile, setRequirementsFile] = useState<File | null>(null);
   const [coursesFile, setCoursesFile] = useState<File | null>(null);
 
@@ -36,7 +38,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
     onComplete({
       program,
       graduationYear,
-      careerGoals: "",
+      careerGoals,
       interests: [],
     });
   };
@@ -101,6 +103,18 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                 placeholder="2026"
                 className="mt-2"
               />
+            </div>
+            <div className="pt-2">
+              <Label className="text-sm font-medium">Career aspirations (optional)</Label>
+              <Textarea
+                value={careerGoals}
+                onChange={(e) => setCareerGoals(e.target.value)}
+                placeholder="e.g., Transitioning from engineering to product management at a tech company..."
+                className="mt-2 min-h-[80px] resize-none"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Helps us suggest elective tracks tailored to your goals.
+              </p>
             </div>
           </div>
         )}
