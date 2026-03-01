@@ -64,38 +64,42 @@ Deno.serve(async (req) => {
 
       const markdown = scrapeData.data?.markdown || scrapeData.markdown || "";
 
-      // Split by course headers: "### 15.XXX Title" or "15.XXX Title" at start of section
-      // The MIT catalog markdown uses ### headers for each course
-      const sections = markdown.split(/(?=###\s*15\.\d{3}|(?:^|\n)15\.\d{3})/);
+      // The MIT catalog markdown has sections like:
+      // ### 15.010 Economic Analysis for Business Decisions   ![...](...)...
+      // We need to split by ### headers and extract just code + title
+      const coursePattern = /(?:###\s*)?(15\.\d{3}[A-Z]?)\s+([^!\n\[(<]+)/g;
+      let match;
 
-      for (const section of sections) {
-        // Extract course code and title from the header line
-        const headerMatch = section.match(/(?:###\s*)?(15\.\d{3}[A-Z]?)\s+([^\n]+)/);
-        if (!headerMatch) continue;
+      while ((match = coursePattern.exec(markdown)) !== null) {
+        const code = match[1];
+        let title = match[2].trim();
 
-        const code = headerMatch[1];
-        // Clean title: remove markdown image refs, links, HTML tags
-        let title = headerMatch[2]
-          .replace(/!\[.*?\]\(.*?\)/g, "") // remove markdown images
-          .replace(/\[([^\]]*)\]\(.*?\)/g, "$1") // keep link text
-          .replace(/<[^>]+>/g, "") // remove HTML tags
-          .replace(/\s+/g, " ")
-          .trim();
+        // Clean up trailing whitespace/punctuation
+        title = title.replace(/\s+$/, "").replace(/[,;:\s]+$/, "");
 
-        // Skip if already seen or title is too short
         if (allCourses.some((c) => c.course_code === code)) continue;
         if (title.length < 3) continue;
 
-        // Extract units: pattern like "Units: 4-0-5" or "Units: 3-0-9"
+        // Find the section for this course to extract metadata
+        const codeEscaped = code.replace(".", "\\.");
+        const sectionMatch = markdown.match(new RegExp(codeEscaped + "[\\s\\S]*?(?=###\\s*15\\.|$)"));
+        const section = sectionMatch ? sectionMatch[0] : "";
+
+        // Extract units
         const unitsMatch = section.match(/Units[:\s]*(\d+)-(\d+)-(\d+)/);
         const credits = unitsMatch
           ? parseInt(unitsMatch[1]) + parseInt(unitsMatch[2]) + parseInt(unitsMatch[3])
           : 12;
 
-        // Extract prerequisites
-        const prereqMatch = section.match(/Prereq[:\s]*([^\n]+)/);
-        const prerequisites = prereqMatch
-          ? prereqMatch[1].replace(/!\[.*?\]\(.*?\)/g, "").replace(/\[([^\]]*)\]\(.*?\)/g, "$1").replace(/<[^>]+>/g, "").trim()
+        // Extract prerequisites - just the first part before any junk
+        const prereqMatch = section.match(/Prereq[:\s]*([^\\U\n]{2,60})/);
+        let prerequisites = prereqMatch ? prereqMatch[1].replace(/!\[.*?\]\(.*?\)/g, "").replace(/\[([^\]]*)\]\(.*?\)/g, "$1").replace(/<[^>]+>/g, "").trim() : "";
+        if (prerequisites.length > 100) prerequisites = prerequisites.slice(0, 100);
+
+        // Extract description - look for substantial text block
+        const descMatch = section.match(/(?:Units[^\n]*\n|P\/D\/F\][^\n]*\n)([A-Z][^#]{30,500})/);
+        let description = descMatch
+          ? descMatch[1].replace(/!\[.*?\]\(.*?\)/g, "").replace(/\[([^\]]*)\]\(.*?\)/g, "$1").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim().slice(0, 500)
           : "";
 
         // Extract a short description (first substantial paragraph after metadata)
