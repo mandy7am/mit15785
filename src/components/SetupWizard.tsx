@@ -96,8 +96,13 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
     });
   };
 
+  const backAction = step === 0 ? onBack : () => setStep(step - 1);
+  const nextAction = step === 2 ? handleComplete : () => setStep(step + 1);
+  const nextLabel = step === 2 ? "View My Schedule" : "Continue";
+  const isReady = canProceed();
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 pb-28 pt-12">
       {/* Step indicators */}
       <div className="flex items-center gap-3 mb-10 animate-fade-in">
         {steps.map((s, i) => (
