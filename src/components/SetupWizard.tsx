@@ -224,26 +224,6 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
             <p className="text-[11px] text-muted-foreground/70 italic">We use this to suggest curated course bundles for your specific career goals.</p>
           </div>
 
-          {/* Back button only */}
-          <div className="flex justify-start mt-10 pt-6 border-t border-border/40">
-            <Button variant="ghost" onClick={onBack} className="gap-2 text-muted-foreground">
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-          </div>
-
-          {/* Sticky right-side navigation arrow */}
-          <button
-            onClick={() => canProceed() && setStep(1)}
-            disabled={!canProceed()}
-            className={`fixed right-6 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 ${
-              canProceed()
-                ? "bg-primary text-primary-foreground shadow-[0_0_24px_-4px_hsl(var(--primary)/0.5)] animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite] cursor-pointer hover:scale-110"
-                : "bg-muted/60 text-muted-foreground/40 backdrop-blur-sm cursor-not-allowed"
-            }`}
-          >
-            <ArrowRight className="w-7 h-7" />
-          </button>
         </div>
       )}
 
@@ -306,16 +286,6 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
             Don't have it handy? We'll use the standard curriculum as default.
           </p>
 
-          <div className="flex justify-between mt-10 pt-6 border-t border-border/40">
-            <Button variant="ghost" onClick={() => setStep(0)} className="gap-2 text-muted-foreground">
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-            <Button onClick={() => setStep(2)} className="gap-2">
-              Continue
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
         </div>
       )}
 
@@ -382,18 +352,30 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
             Only Sloan (Dept. 15) courses are synced by default to keep things fast.
           </p>
 
-          <div className="flex justify-between mt-10 pt-6 border-t border-border/40">
-            <Button variant="ghost" onClick={() => setStep(1)} className="gap-2 text-muted-foreground">
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </Button>
-            <Button onClick={handleComplete} className="gap-2">
-              View My Schedule
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
         </div>
       )}
+
+      {/* Sticky bottom navigation bar — consistent across all steps */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-background/80 backdrop-blur-md border-t border-border/50">
+        <div className="max-w-2xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Button variant="ghost" onClick={backAction} className="gap-2 text-muted-foreground">
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Button>
+          <Button
+            onClick={nextAction}
+            disabled={!isReady}
+            className={`gap-2 px-6 transition-all duration-500 ${
+              isReady
+                ? "shadow-[0_0_20px_-4px_hsl(var(--primary)/0.4)]"
+                : ""
+            }`}
+          >
+            {nextLabel}
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
