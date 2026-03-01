@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { StudentProfile, Course, CourseBundle } from "@/types/course";
 import { REQUIRED_COURSES, SAMPLE_BUNDLES } from "@/data/mockCourses";
 import { DEFAULT_REQUIREMENTS } from "@/data/degreeRequirements";
@@ -8,7 +8,6 @@ import DegreeAudit from "./DegreeAudit";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import SettingsModal from "./SettingsModal";
 import {
   TreePine,
@@ -16,7 +15,6 @@ import {
   Sparkles,
   BookOpen,
   GraduationCap,
-  RefreshCw,
   ClipboardCheck,
   Lightbulb,
   X,
@@ -41,6 +39,9 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [sidebarTab, setSidebarTab] = useState<"bundles" | "audit">("bundles");
   const [showGuide, setShowGuide] = useState(true);
   const [hoveredBundle, setHoveredBundle] = useState<CourseBundle | null>(null);
+  const [isEditingRole, setIsEditingRole] = useState(false);
+  const [editingRoleText, setEditingRoleText] = useState("");
+  const roleInputRef = useRef<HTMLInputElement>(null);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
   const selectedElectives = selectedBundle?.courses || [];
@@ -148,51 +149,44 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
             {sidebarTab === "bundles" ? (
               <>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-2xl font-display text-foreground">AI-Curated Bundles</h2>
-                    <Sparkles className="w-4 h-4 text-primary" />
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="text-xl font-display text-foreground">AI-Curated Bundles for</h2>
+                    {isEditingRole ? (
+                      <input
+                        ref={roleInputRef}
+                        type="text"
+                        value={editingRoleText}
+                        onChange={(e) => setEditingRoleText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            setPrompt(editingRoleText);
+                            setProfile((p) => ({ ...p, careerGoals: editingRoleText }));
+                            setIsEditingRole(false);
+                          }
+                        }}
+                        onBlur={() => {
+                          setPrompt(editingRoleText);
+                          setProfile((p) => ({ ...p, careerGoals: editingRoleText }));
+                          setIsEditingRole(false);
+                        }}
+                        className="text-xl font-display font-bold text-primary bg-transparent border-b-2 border-primary outline-none min-w-[120px] max-w-full px-0.5"
+                        autoFocus
+                      />
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setEditingRoleText(prompt || profile.careerGoals || "");
+                          setIsEditingRole(true);
+                          setTimeout(() => roleInputRef.current?.focus(), 0);
+                        }}
+                        className="text-xl font-display font-bold text-primary underline decoration-dotted decoration-primary/60 underline-offset-4 cursor-pointer hover:decoration-solid transition-all"
+                      >
+                        {dreamRoleLabel}
+                      </button>
+                    )}
+                    <Sparkles className="w-4 h-4 text-primary shrink-0" />
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    for <span className="font-medium text-foreground">{dreamRoleLabel}</span>
-                  </p>
                 </div>
-
-                {/* First-time guidance tip */}
-                {showGuide && (
-                  <Card className="p-4 border-primary/30 bg-primary/5 relative animate-fade-in">
-                    <button
-                      onClick={() => setShowGuide(false)}
-                      className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                    <div className="flex gap-3">
-                      <Lightbulb className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                      <div className="space-y-1.5 pr-4">
-                        <p className="text-sm font-medium text-foreground">
-                          These bundles are AI-curated for you
-                        </p>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          Explore the elective bundles below — each one is tailored to a career path. Hover to preview on your calendar, click a course to see why it fits, then{" "}
-                          <span className="font-medium text-foreground">apply the bundle that works</span>.
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                )}
-
-                <Card className="p-4 bg-forest-mist border-forest-light/30">
-                  <Textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Describe your target role or industry..."
-                    className="min-h-[60px] text-sm resize-none bg-card border-border"
-                  />
-                  <Button size="sm" className="mt-3 gap-2 w-full">
-                    <RefreshCw className="w-3 h-3" />
-                    Update Recommendations
-                  </Button>
-                </Card>
 
                 <div className="space-y-4">
                   {SAMPLE_BUNDLES.map((bundle) => (
