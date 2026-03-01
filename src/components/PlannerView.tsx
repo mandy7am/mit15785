@@ -18,6 +18,7 @@ import {
   ClipboardCheck,
   Lightbulb,
   X,
+  Download,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
