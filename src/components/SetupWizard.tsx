@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
