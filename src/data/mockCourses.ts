@@ -17,6 +17,8 @@ export const ELECTIVE_COURSES: Course[] = [
   { id: "e6", code: "15.434", title: "Corporate Finance", credits: 3, description: "Capital structure, valuation, and financial strategy.", timeSlot: "11:00–12:30", day: "Fri", isRequired: false, category: "Finance" },
   { id: "e7", code: "15.565", title: "Digital Transformation", credits: 3, description: "Leading digital change in organizations.", timeSlot: "4:00–5:30", day: "Fri", isRequired: false, category: "Technology" },
   { id: "e8", code: "15.342", title: "Organizations & Incentives", credits: 3, description: "How organizations design effective incentive systems.", timeSlot: "2:00–3:30", day: "Mon/Wed", isRequired: false, category: "Leadership" },
+  { id: "e9", code: "15.S50", title: "Energy Ventures", credits: 3, description: "Building ventures in the clean energy sector.", timeSlot: "6:00–7:30", day: "Mon/Wed", isRequired: false, category: "Entrepreneurship" },
+  { id: "e10", code: "15.677", title: "Urban Analytics", credits: 3, description: "Data-driven approaches to urban planning challenges.", timeSlot: "6:00–7:30", day: "Tue/Thu", isRequired: false, category: "Technology" },
 ];
 
 export const SAMPLE_BUNDLES: CourseBundle[] = [

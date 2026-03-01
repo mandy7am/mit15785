@@ -18,6 +18,7 @@ import {
   ClipboardCheck,
   Lightbulb,
   X,
+  Download,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
@@ -55,6 +56,21 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
       ? profile.careerGoals.slice(0, 40) + "…"
       : profile.careerGoals
     : "Your Goals";
+  const handleDownloadSchedule = () => {
+    const allCourses = [...REQUIRED_COURSES, ...selectedElectives];
+    const header = "Code,Title,Type,Day,Time,Credits";
+    const rows = allCourses.map((c) =>
+      `"${c.code}","${c.title}","${c.isRequired ? "Core" : "Elective"}","${c.day || ""}","${c.timeSlot || ""}","${c.credits}"`
+    );
+    const csv = [header, ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${profile.program}_Fall_Schedule.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -116,6 +132,18 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                 <p className="text-xs text-muted-foreground mt-1">Total Credits</p>
               </Card>
             </div>
+
+            {/* Download button - visible when a bundle is applied */}
+            {selectedBundleId && (
+              <Button
+                onClick={handleDownloadSchedule}
+                variant="outline"
+                className="w-full gap-2 animate-fade-in"
+              >
+                <Download className="w-4 h-4" />
+                Download Schedule (.csv)
+              </Button>
+            )}
           </div>
 
           {/* Sidebar */}
