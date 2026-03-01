@@ -32,10 +32,21 @@ const getCategoryStyle = (course: Course) => {
 };
 
 const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: CourseCalendarProps) => {
+  const allCourses = [...requiredCourses, ...selectedElectives];
+
   const getCourse = (day: string, timeSlot: string): Course | undefined => {
-    return [...requiredCourses, ...selectedElectives].find(
-      (c) => c.day === day && c.timeSlot === timeSlot
-    );
+    return allCourses.find((c) => {
+      if (c.timeSlot !== timeSlot) return false;
+      // "Mon/Wed" should match both "Mon" and "Wed"
+      const courseDays = c.day?.split("/") || [];
+      return courseDays.includes(day);
+    });
+  };
+
+  // Check if a course spans this day as part of a multi-day pair (for visual spanning)
+  const isFirstDayOfPair = (day: string, course: Course): boolean => {
+    const courseDays = course.day?.split("/") || [];
+    return courseDays[0] === day;
   };
 
   return (
@@ -56,7 +67,7 @@ const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: C
 
         {/* Time slots */}
         {TIME_SLOTS.map((timeSlot) => (
-          <div key={timeSlot} className="grid grid-cols-4 gap-2 mb-2">
+          <div key={timeSlot} className="grid grid-cols-6 gap-2 mb-2">
             <div className="p-3 text-sm text-muted-foreground flex items-center">
               {timeSlot}
             </div>
