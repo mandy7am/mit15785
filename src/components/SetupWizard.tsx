@@ -32,9 +32,11 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
   const [graduationYear, setGraduationYear] = useState("2026");
   const [careerGoals, setCareerGoals] = useState("");
   const [requirementsFile, setRequirementsFile] = useState<File | null>(null);
-  const [coursesFile, setCoursesFile] = useState<File | null>(null);
   const [reqScanning, setReqScanning] = useState(false);
-  const [courseScanning, setCourseScanning] = useState(false);
+  const [catalogSyncing, setCatalogSyncing] = useState(false);
+  const [catalogSynced, setCatalogSynced] = useState(false);
+  const [catalogCount, setCatalogCount] = useState(0);
+  const [catalogError, setCatalogError] = useState("");
 
   const steps = [
     { icon: User, label: "Profile" },
