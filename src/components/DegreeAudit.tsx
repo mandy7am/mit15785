@@ -37,7 +37,7 @@ const DegreeAudit = ({ requirements, onToggle }: DegreeAuditProps) => {
       </div>
 
       {/* Categories */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="space-y-4">
         {requirements.map((category, catIdx) => {
           const catCompleted = category.courses.filter((c) => c.completed).length;
           const allDone = catCompleted === category.courses.length;
