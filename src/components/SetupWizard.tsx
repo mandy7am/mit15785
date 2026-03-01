@@ -219,17 +219,26 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
             <p className="text-[11px] text-muted-foreground/70 italic">We use this to suggest curated course bundles for your specific career goals.</p>
           </div>
 
-          {/* Navigation */}
-          <div className="flex justify-between mt-10 pt-6 border-t border-border/40">
+          {/* Back button only */}
+          <div className="flex justify-start mt-10 pt-6 border-t border-border/40">
             <Button variant="ghost" onClick={onBack} className="gap-2 text-muted-foreground">
               <ArrowLeft className="w-4 h-4" />
               Back
             </Button>
-            <Button onClick={() => setStep(1)} disabled={!canProceed()} className="gap-2">
-              Continue
-              <ArrowRight className="w-4 h-4" />
-            </Button>
           </div>
+
+          {/* Sticky right-side navigation arrow */}
+          <button
+            onClick={() => canProceed() && setStep(1)}
+            disabled={!canProceed()}
+            className={`fixed right-6 top-1/2 -translate-y-1/2 z-30 w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 ${
+              canProceed()
+                ? "bg-primary text-primary-foreground shadow-[0_0_24px_-4px_hsl(var(--primary)/0.5)] animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite] cursor-pointer hover:scale-110"
+                : "bg-muted/60 text-muted-foreground/40 backdrop-blur-sm cursor-not-allowed"
+            }`}
+          >
+            <ArrowRight className="w-7 h-7" />
+          </button>
         </div>
       )}
 
