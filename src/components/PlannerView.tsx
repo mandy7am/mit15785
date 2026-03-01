@@ -29,8 +29,12 @@ const DEFAULT_PROFILE: StudentProfile = {
   interests: [],
 };
 
-const PlannerView = () => {
-  const [profile, setProfile] = useState<StudentProfile>(DEFAULT_PROFILE);
+interface PlannerViewProps {
+  initialProfile?: StudentProfile | null;
+}
+
+const PlannerView = ({ initialProfile }: PlannerViewProps) => {
+  const [profile, setProfile] = useState<StudentProfile>(initialProfile || DEFAULT_PROFILE);
   const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(profile.careerGoals);
   const [requirements, setRequirements] = useState(DEFAULT_REQUIREMENTS);
