@@ -1,1 +1,4 @@
 project_id = "mxvieokvennbuwlskyvd"
+
+[functions.sync-mit-catalog]
+verify_jwt = false

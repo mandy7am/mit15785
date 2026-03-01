@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      mit_courses: {
+        Row: {
+          course_code: string
+          created_at: string
+          credits: number
+          day: string | null
+          department: string
+          description: string | null
+          id: string
+          prerequisites: string | null
+          semester: string | null
+          synced_at: string
+          time_slot: string | null
+          title: string
+        }
+        Insert: {
+          course_code: string
+          created_at?: string
+          credits?: number
+          day?: string | null
+          department?: string
+          description?: string | null
+          id?: string
+          prerequisites?: string | null
+          semester?: string | null
+          synced_at?: string
+          time_slot?: string | null
+          title: string
+        }
+        Update: {
+          course_code?: string
+          created_at?: string
+          credits?: number
+          day?: string | null
+          department?: string
+          description?: string | null
+          id?: string
+          prerequisites?: string | null
+          semester?: string | null
+          synced_at?: string
+          time_slot?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
