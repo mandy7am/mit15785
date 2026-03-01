@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StudentProfile, Course, CourseBundle } from "@/types/course";
+
 import { REQUIRED_COURSES, SAMPLE_BUNDLES } from "@/data/mockCourses";
 import { DEFAULT_REQUIREMENTS } from "@/data/degreeRequirements";
 import CourseCalendar from "./CourseCalendar";
