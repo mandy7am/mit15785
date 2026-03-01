@@ -3,7 +3,6 @@ import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { StudentProfile } from "@/types/course";
 
@@ -26,27 +25,24 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
   const [graduationYear, setGraduationYear] = useState("2026");
   const [requirementsFile, setRequirementsFile] = useState<File | null>(null);
   const [coursesFile, setCoursesFile] = useState<File | null>(null);
-  const [careerGoals, setCareerGoals] = useState("");
 
   const steps = [
     { icon: User, label: "Program", description: "Tell us about yourself" },
     { icon: FileText, label: "Requirements", description: "Upload your curriculum guide" },
     { icon: BookOpen, label: "Courses", description: "Upload course offerings" },
-    { icon: Upload, label: "Goals", description: "Share your career aspirations" },
   ];
 
   const handleComplete = () => {
     onComplete({
       program,
       graduationYear,
-      careerGoals,
+      careerGoals: "",
       interests: [],
     });
   };
 
   const canProceed = () => {
     if (step === 0) return program !== "";
-    if (step === 3) return careerGoals.trim() !== "";
     return true;
   };
 
@@ -165,21 +161,6 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
           </div>
         )}
 
-        {step === 3 && (
-          <div className="space-y-4">
-            <Label className="text-sm font-medium">What are your career goals?</Label>
-            <Textarea
-              value={careerGoals}
-              onChange={(e) => setCareerGoals(e.target.value)}
-              placeholder="e.g., I'm transitioning from engineering to product management at a tech company. I want to build skills in strategy, leadership, and data-driven decision making..."
-              className="min-h-[140px] resize-none"
-            />
-            <p className="text-xs text-muted-foreground">
-              This helps us suggest elective bundles tailored to your ambitions.
-            </p>
-          </div>
-        )}
-
         {/* Navigation */}
         <div className="flex justify-between mt-8 pt-6 border-t border-border">
           <Button
@@ -190,13 +171,13 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
             <ArrowLeft className="w-4 h-4" />
             Back
           </Button>
-          {step < 3 ? (
+          {step < 2 ? (
             <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="gap-2">
               Continue
               <ArrowRight className="w-4 h-4" />
             </Button>
           ) : (
-            <Button onClick={handleComplete} disabled={!canProceed()} className="gap-2">
+            <Button onClick={handleComplete} className="gap-2">
               View My Schedule
               <ArrowRight className="w-4 h-4" />
             </Button>
