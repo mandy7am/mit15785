@@ -170,26 +170,27 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
           </div>
 
           {/* Dream Role */}
-          <div className="space-y-4">
+          <div className="rounded-2xl bg-accent/30 border border-border/40 p-6 space-y-4">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-primary/70" />
-              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">What's your dream role?</label>
+              <Sparkles className="w-4 h-4 text-primary" />
+              <label className="text-sm font-semibold text-foreground">What's your dream role?</label>
               <span className="text-[10px] text-muted-foreground/60 ml-auto italic">optional</span>
             </div>
-            <input
+            <textarea
               value={careerGoals}
               onChange={(e) => setCareerGoals(e.target.value)}
-              placeholder="e.g., Leading product strategy at a climate tech startup..."
-              className="w-full bg-transparent border-b border-border/60 focus:border-primary/60 outline-none py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 transition-colors"
+              placeholder="e.g. Product Manager in Climate Tech"
+              rows={2}
+              className="w-full rounded-xl border border-border/60 bg-card/80 px-4 py-3 text-base font-medium text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition-all resize-none"
             />
-            <div className="flex flex-wrap gap-2 pt-1">
+            <div className="flex flex-wrap gap-2">
               {ROLE_TAGS.map((tag) => (
                 <button
                   key={tag}
                   onClick={() => handleTagClick(tag)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 ${
                     careerGoals.includes(tag)
-                      ? "border-primary/50 bg-primary/10 text-primary"
+                      ? "border-primary bg-primary text-primary-foreground shadow-sm"
                       : "border-border/50 text-muted-foreground hover:border-primary/30 hover:text-foreground"
                   }`}
                 >
@@ -197,6 +198,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                 </button>
               ))}
             </div>
+            <p className="text-[11px] text-muted-foreground/70 italic">We use this to suggest curated course bundles for your specific career goals.</p>
           </div>
 
           {/* Navigation */}
