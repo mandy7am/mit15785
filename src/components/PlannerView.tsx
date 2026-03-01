@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { StudentProfile, Course, CourseBundle } from "@/types/course";
 import { REQUIRED_COURSES, SAMPLE_BUNDLES } from "@/data/mockCourses";
 import { DEFAULT_REQUIREMENTS } from "@/data/degreeRequirements";
@@ -8,7 +8,6 @@ import DegreeAudit from "./DegreeAudit";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import SettingsModal from "./SettingsModal";
 import {
   TreePine,
@@ -16,7 +15,6 @@ import {
   Sparkles,
   BookOpen,
   GraduationCap,
-  RefreshCw,
   ClipboardCheck,
   Lightbulb,
   X,
