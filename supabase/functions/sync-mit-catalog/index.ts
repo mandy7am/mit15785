@@ -102,29 +102,6 @@ Deno.serve(async (req) => {
           ? descMatch[1].replace(/!\[.*?\]\(.*?\)/g, "").replace(/\[([^\]]*)\]\(.*?\)/g, "$1").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim().slice(0, 500)
           : "";
 
-        // Extract a short description (first substantial paragraph after metadata)
-        let description = "";
-        const descLines = section.split("\n").filter((l: string) => {
-          const clean = l.replace(/!\[.*?\]\(.*?\)/g, "").replace(/<[^>]+>/g, "").trim();
-          return (
-            clean.length > 50 &&
-            !clean.startsWith("Prereq") &&
-            !clean.startsWith("Units") &&
-            !clean.startsWith("URL:") &&
-            !clean.startsWith("Lecture:") &&
-            !clean.match(/^_[^_]+_$/) // skip instructor lines
-          );
-        });
-        if (descLines.length > 0) {
-          description = descLines[0]
-            .replace(/!\[.*?\]\(.*?\)/g, "")
-            .replace(/\[([^\]]*)\]\(.*?\)/g, "$1")
-            .replace(/<[^>]+>/g, "")
-            .replace(/\s+/g, " ")
-            .trim()
-            .slice(0, 500);
-        }
-
         allCourses.push({
           course_code: code,
           title,
