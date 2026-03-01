@@ -14,11 +14,12 @@ import {
   TreePine,
   Calendar,
   Sparkles,
-  Send,
   BookOpen,
   GraduationCap,
   RefreshCw,
   ClipboardCheck,
+  Lightbulb,
+  X,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
@@ -34,6 +35,7 @@ const PlannerView = () => {
   const [prompt, setPrompt] = useState(profile.careerGoals);
   const [requirements, setRequirements] = useState(DEFAULT_REQUIREMENTS);
   const [sidebarTab, setSidebarTab] = useState<"tracks" | "audit">("tracks");
+  const [showGuide, setShowGuide] = useState(true);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
   const selectedElectives = selectedBundle?.courses || [];
@@ -140,6 +142,30 @@ const PlannerView = () => {
                   </p>
                 </div>
 
+                {/* First-time guidance tip */}
+                {showGuide && (
+                  <Card className="p-4 border-primary/30 bg-primary/5 relative animate-fade-in">
+                    <button
+                      onClick={() => setShowGuide(false)}
+                      className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                    <div className="flex gap-3">
+                      <Lightbulb className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div className="space-y-1.5 pr-4">
+                        <p className="text-sm font-medium text-foreground">
+                          These tracks are AI-curated for you
+                        </p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          Explore the elective bundles below — each one is tailored to a career path. Click a track to preview its courses on your calendar, then{" "}
+                          <span className="font-medium text-foreground">commit to the one that fits</span>.
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                )}
+
                 <Card className="p-4 bg-forest-mist border-forest-light/30">
                   <Textarea
                     value={prompt}
@@ -185,7 +211,7 @@ const PlannerView = () => {
                           : {
                               ...cat,
                               courses: cat.courses.map((c, coIdx) =>
-                                coIdx === courseIdx ? { ...c, completed: !c.completed } : c
+                                coIdx !== courseIdx ? c : { ...c, completed: !c.completed }
                               ),
                             }
                       )
