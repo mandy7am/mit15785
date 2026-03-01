@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SettingsModal from "./SettingsModal";
+import ExportReviewModal from "./ExportReviewModal";
 import {
   TreePine,
   Calendar,
@@ -42,7 +43,23 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [hoveredBundle, setHoveredBundle] = useState<CourseBundle | null>(null);
   const [isEditingRole, setIsEditingRole] = useState(false);
   const [editingRoleText, setEditingRoleText] = useState("");
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exportPulsed, setExportPulsed] = useState(false);
+  const [prevBundleId, setPrevBundleId] = useState<string | null>(null);
   const roleInputRef = useRef<HTMLInputElement>(null);
+
+  // Trigger pulse animation when a bundle is first selected
+  useEffect(() => {
+    if (selectedBundleId && selectedBundleId !== prevBundleId) {
+      setExportPulsed(true);
+      const timer = setTimeout(() => setExportPulsed(false), 1200);
+      setPrevBundleId(selectedBundleId);
+      return () => clearTimeout(timer);
+    }
+    if (!selectedBundleId) {
+      setPrevBundleId(null);
+    }
+  }, [selectedBundleId, prevBundleId]);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
   const selectedElectives = selectedBundle?.courses || [];
@@ -86,6 +103,22 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               <GraduationCap className="w-3 h-3" />
               {profile.program}
             </Badge>
+            <Button
+              variant={selectedBundleId ? "default" : "outline"}
+              size="sm"
+              disabled={!selectedBundleId}
+              onClick={() => setShowExportModal(true)}
+              className={`gap-1.5 transition-all duration-300 ${
+                !selectedBundleId
+                  ? "opacity-30 cursor-not-allowed"
+                  : exportPulsed
+                  ? "animate-[pulse_0.6s_ease-in-out_2]"
+                  : ""
+              }`}
+            >
+              <Download className="w-3.5 h-3.5" />
+              Export Schedule
+            </Button>
             <Badge variant="outline" className="gap-1">
               <BookOpen className="w-3 h-3" />
               {totalCredits} credits
@@ -120,17 +153,15 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
 
 
 
-            {/* Download button - visible when a bundle is applied */}
-            {selectedBundleId && (
-              <Button
-                onClick={handleDownloadSchedule}
-                variant="outline"
-                className="w-full gap-2 animate-fade-in"
-              >
-                <Download className="w-4 h-4" />
-                Download Schedule (.csv)
-              </Button>
-            )}
+            <ExportReviewModal
+              open={showExportModal}
+              onOpenChange={setShowExportModal}
+              requiredCourses={REQUIRED_COURSES}
+              selectedBundle={selectedBundle || null}
+              selectedElectives={selectedElectives}
+              program={profile.program}
+              onConfirmDownload={handleDownloadSchedule}
+            />
           </div>
 
           {/* Sidebar */}
