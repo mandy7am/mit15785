@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check, Sparkles, Compass, GraduationCap, TrendingUp, Briefcase, Globe, BarChart3 } from "lucide-react";
+import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check, Sparkles, Compass, GraduationCap, TrendingUp, Briefcase, Globe, BarChart3, RefreshCw, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { StudentProfile } from "@/types/course";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SetupWizardProps {
   onComplete: (profile: StudentProfile) => void;
