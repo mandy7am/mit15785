@@ -301,63 +301,67 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
         </div>
       )}
 
-      {/* Step 2: Course Catalog Upload */}
+      {/* Step 2: Sync MIT Catalog */}
       {step === 2 && (
         <div className="w-full max-w-lg animate-slide-up">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-display text-foreground mb-3">Scan the horizon</h1>
-            <p className="text-muted-foreground text-sm">Upload the course catalog to discover electives.</p>
+            <h1 className="text-3xl font-display text-foreground mb-3">Sync the MIT Catalog</h1>
+            <p className="text-muted-foreground text-sm">We'll pull Department 15 (Sloan) courses directly from MIT.</p>
           </div>
 
-          <div
-            className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-500 cursor-pointer group ${
-              courseScanning
-                ? "border-primary/50 bg-primary/5"
-                : coursesFile
-                ? "border-primary/40 bg-accent/30"
-                : "border-border/50 hover:border-primary/30 hover:bg-muted/30"
-            }`}
-            onClick={() => document.getElementById("course-upload")?.click()}
-          >
-            {courseScanning ? (
-              <div className="space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-full bg-primary/15 flex items-center justify-center animate-pulse">
-                  <Compass className="w-6 h-6 text-primary animate-spin" style={{ animationDuration: '3s' }} />
-                </div>
-                <p className="text-sm font-medium text-primary">Scanning the catalog...</p>
-                <div className="w-32 h-1 mx-auto rounded-full bg-primary/20 overflow-hidden">
-                  <div className="h-full bg-primary rounded-full animate-pulse" style={{ width: '60%' }} />
-                </div>
-              </div>
-            ) : coursesFile ? (
-              <div className="space-y-3">
-                <div className="w-12 h-12 mx-auto rounded-full bg-primary/15 flex items-center justify-center">
-                  <Check className="w-6 h-6 text-primary" />
-                </div>
-                <p className="text-sm font-medium text-primary">{coursesFile.name}</p>
-                <p className="text-xs text-muted-foreground">Click to replace</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-full bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                  <Compass className="w-6 h-6 text-muted-foreground group-hover:text-primary/70 transition-colors" strokeWidth={1.5} />
+          <div className="rounded-2xl border border-border/60 bg-card/80 p-10 text-center space-y-6">
+            {catalogSynced ? (
+              <div className="space-y-4 animate-fade-in">
+                <div className="w-16 h-16 mx-auto rounded-full bg-primary/15 flex items-center justify-center">
+                  <CheckCircle2 className="w-8 h-8 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-foreground font-medium">Drop your course catalog here</p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF, CSV, or XLSX</p>
+                  <p className="text-lg font-semibold text-foreground">{catalogCount} Courses Synced</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Your AI Bundles are now calibrated to the latest MIT schedule.
+                  </p>
                 </div>
               </div>
+            ) : catalogSyncing ? (
+              <div className="space-y-4">
+                <div className="w-16 h-16 mx-auto rounded-full bg-primary/15 flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-primary">Fetching Sloan courses from MIT...</p>
+                  <p className="text-xs text-muted-foreground mt-1">This may take a moment</p>
+                </div>
+                <div className="w-40 h-1.5 mx-auto rounded-full bg-primary/20 overflow-hidden">
+                  <div className="h-full bg-primary rounded-full animate-[pulse_1.5s_ease-in-out_infinite]" style={{ width: '65%' }} />
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <div className="w-16 h-16 mx-auto rounded-full bg-muted flex items-center justify-center">
+                  <RefreshCw className="w-7 h-7 text-muted-foreground" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <p className="text-sm text-foreground font-medium">Pull the latest Sloan course catalog</p>
+                  <p className="text-xs text-muted-foreground mt-1">Department 15 · Credits, Prerequisites & Time Slots</p>
+                </div>
+                <Button
+                  onClick={handleSyncCatalog}
+                  size="lg"
+                  className="gap-2 px-8"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Sync MIT Catalog
+                </Button>
+              </div>
             )}
-            <input
-              id="course-upload"
-              type="file"
-              accept=".pdf,.xlsx,.csv"
-              className="hidden"
-              onChange={(e) => handleCourseFile(e.target.files?.[0] || null)}
-            />
+
+            {catalogError && (
+              <p className="text-sm text-destructive mt-2">{catalogError}</p>
+            )}
           </div>
+
           <p className="text-xs text-muted-foreground text-center mt-4">
-            We'll use the latest Sloan course offerings if you skip this step.
+            Only Sloan (Dept. 15) courses are synced by default to keep things fast.
           </p>
 
           <div className="flex justify-between mt-10 pt-6 border-t border-border/40">
