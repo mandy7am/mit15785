@@ -217,7 +217,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
       {step === 1 && (
         <div className="w-full max-w-lg animate-slide-up">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-display text-foreground mb-3">Calibrate your requirements</h1>
+            <h1 className="text-3xl font-display text-foreground mb-3">What are your graduation requirements?</h1>
             <p className="text-muted-foreground text-sm">Upload your degree audit to map your core.</p>
           </div>
 
