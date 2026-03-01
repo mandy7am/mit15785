@@ -22,38 +22,38 @@ export const ELECTIVE_COURSES: Course[] = [
 export const SAMPLE_BUNDLES: CourseBundle[] = [
   {
     id: "b1",
-    name: "Tech Leadership Track",
+    name: "Tech Leadership Bundle",
     description: "For students targeting product management, tech strategy, or CTO roles.",
     targetRole: "Product Manager / Tech Lead",
     matchScore: 95,
     courses: [
-      ELECTIVE_COURSES[3], // AI & ML
-      ELECTIVE_COURSES[6], // Digital Transformation
-      ELECTIVE_COURSES[2], // System Dynamics
+      { ...ELECTIVE_COURSES[3], aiReason: "AI/ML fluency is essential for modern product managers who need to evaluate technical feasibility and drive data-informed roadmaps." },
+      { ...ELECTIVE_COURSES[6], aiReason: "Understanding digital transformation frameworks will prepare you to lead cross-functional tech initiatives at scale." },
+      { ...ELECTIVE_COURSES[2], aiReason: "System dynamics modeling helps tech leaders anticipate second-order effects of product and platform decisions." },
     ],
   },
   {
     id: "b2",
-    name: "Finance & Strategy Track",
+    name: "Finance & Strategy Bundle",
     description: "For students pursuing investment banking, consulting, or CFO roles.",
     targetRole: "Investment Banking / Consulting",
     matchScore: 88,
     courses: [
-      ELECTIVE_COURSES[0], // Investments
-      ELECTIVE_COURSES[5], // Corporate Finance
-      ELECTIVE_COURSES[4], // Negotiation
+      { ...ELECTIVE_COURSES[0], aiReason: "Deep investment theory is foundational for roles in banking and asset management where valuation is a daily task." },
+      { ...ELECTIVE_COURSES[5], aiReason: "Corporate finance equips you with the capital structure and M&A frameworks central to consulting engagements." },
+      { ...ELECTIVE_COURSES[4], aiReason: "Negotiation skills are critical for deal-making roles in both banking and strategic advisory." },
     ],
   },
   {
     id: "b3",
-    name: "Entrepreneurship Track",
+    name: "Entrepreneurship Bundle",
     description: "For students planning to launch their own venture post-graduation.",
     targetRole: "Founder / Entrepreneur",
     matchScore: 92,
     courses: [
-      ELECTIVE_COURSES[1], // Entrepreneurial Marketing
-      ELECTIVE_COURSES[4], // Negotiation
-      ELECTIVE_COURSES[3], // AI & ML
+      { ...ELECTIVE_COURSES[1], aiReason: "Startup marketing requires lean, scrappy strategies — this course teaches you to acquire customers before you have a brand." },
+      { ...ELECTIVE_COURSES[4], aiReason: "Founders negotiate constantly — with investors, co-founders, and early hires. This builds that muscle." },
+      { ...ELECTIVE_COURSES[3], aiReason: "Understanding AI/ML lets you identify where automation can give your startup an unfair advantage." },
     ],
   },
 ];
