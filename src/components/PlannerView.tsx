@@ -17,8 +17,6 @@ import {
   BookOpen,
   GraduationCap,
   ClipboardCheck,
-  Lightbulb,
-  X,
   Download,
 } from "lucide-react";
 
@@ -39,13 +37,13 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [prompt, setPrompt] = useState(profile.careerGoals);
   const [requirements, setRequirements] = useState(DEFAULT_REQUIREMENTS);
   const [sidebarTab, setSidebarTab] = useState<"bundles" | "audit">("bundles");
-  const [showGuide, setShowGuide] = useState(true);
   const [hoveredBundle, setHoveredBundle] = useState<CourseBundle | null>(null);
   const [isEditingRole, setIsEditingRole] = useState(false);
   const [editingRoleText, setEditingRoleText] = useState("");
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportPulsed, setExportPulsed] = useState(false);
   const [prevBundleId, setPrevBundleId] = useState<string | null>(null);
+  const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
   const roleInputRef = useRef<HTMLInputElement>(null);
 
   // Trigger pulse animation when a bundle is first selected
@@ -73,6 +71,22 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
       ? profile.careerGoals.slice(0, 40) + "…"
       : profile.careerGoals
     : "Your Goals";
+
+  const handleSelectBundle = (bundle: CourseBundle) => {
+    if (selectedBundleId === bundle.id) {
+      // Remove
+      setSelectedBundleId(null);
+      setAnimatingIds(new Set());
+    } else {
+      // Add — trigger stagger
+      setSelectedBundleId(bundle.id);
+      const ids = new Set(bundle.courses.map((c) => c.id));
+      setAnimatingIds(ids);
+      // Clear animating flag after animations complete
+      setTimeout(() => setAnimatingIds(new Set()), 800);
+    }
+  };
+
   const handleDownloadSchedule = () => {
     const allCourses = [...REQUIRED_COURSES, ...selectedElectives];
     const header = "Code,Title,Type,Day,Time,Credits";
@@ -93,12 +107,12 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
     <div className="min-h-screen bg-background">
       {/* Top bar */}
       <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <TreePine className="w-5 h-5 text-primary" />
             <span className="font-display text-lg text-foreground">Course Planner</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Badge variant="secondary" className="gap-1">
               <GraduationCap className="w-3 h-3" />
               {profile.program}
@@ -128,49 +142,16 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Calendar - takes 2 cols */}
-          <div className="lg:col-span-2 lg:sticky lg:top-20 lg:self-start space-y-6">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Calendar className="w-5 h-5 text-primary" />
-                <h2 className="text-2xl font-display text-foreground">Fall Semester</h2>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Required courses are pre-filled. Select a bundle to fill remaining slots.
-              </p>
-            </div>
-
-            <Card className="p-6 bg-card/80 backdrop-blur-sm">
-              <CourseCalendar
-                requiredCourses={REQUIRED_COURSES}
-                selectedElectives={selectedElectives}
-                hoveredBundle={hoveredBundle}
-              />
-            </Card>
-
-
-
-
-            <ExportReviewModal
-              open={showExportModal}
-              onOpenChange={setShowExportModal}
-              requiredCourses={REQUIRED_COURSES}
-              selectedBundle={selectedBundle || null}
-              selectedElectives={selectedElectives}
-              program={profile.program}
-              onConfirmDownload={handleDownloadSchedule}
-            />
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
+        {/* Strict 30/70 split */}
+        <div className="flex gap-6" style={{ minHeight: "calc(100vh - 80px)" }}>
+          {/* LEFT: Bundle Gallery — 30% */}
+          <aside className="w-[30%] shrink-0 space-y-5 overflow-y-auto max-h-[calc(100vh-100px)] sticky top-20 pr-1">
             {/* Toggle buttons */}
             <div className="flex rounded-lg bg-muted p-1 gap-1">
               <button
                 onClick={() => setSidebarTab("bundles")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   sidebarTab === "bundles"
                     ? "bg-card text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
@@ -181,14 +162,14 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               </button>
               <button
                 onClick={() => setSidebarTab("audit")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   sidebarTab === "audit"
                     ? "bg-card text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <ClipboardCheck className="w-4 h-4" />
-                Degree Audit
+                Audit
               </button>
             </div>
 
@@ -196,7 +177,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               <>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-xl font-display text-foreground">AI-Curated Bundles for</h2>
+                    <h2 className="text-lg font-display text-foreground">AI Bundles for</h2>
                     {isEditingRole ? (
                       <input
                         ref={roleInputRef}
@@ -215,7 +196,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                           setProfile((p) => ({ ...p, careerGoals: editingRoleText }));
                           setIsEditingRole(false);
                         }}
-                        className="text-xl font-display font-bold text-primary bg-transparent border-b-2 border-primary outline-none min-w-[120px] max-w-full px-0.5"
+                        className="text-lg font-display font-bold text-primary bg-transparent border-b-2 border-primary outline-none min-w-[100px] max-w-full px-0.5"
                         autoFocus
                       />
                     ) : (
@@ -225,7 +206,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                           setIsEditingRole(true);
                           setTimeout(() => roleInputRef.current?.focus(), 0);
                         }}
-                        className="text-xl font-display font-bold text-primary underline decoration-dotted decoration-primary/60 underline-offset-4 cursor-pointer hover:decoration-solid transition-all"
+                        className="text-lg font-display font-bold text-primary underline decoration-dotted decoration-primary/60 underline-offset-4 cursor-pointer hover:decoration-solid transition-all"
                       >
                         {dreamRoleLabel}
                       </button>
@@ -234,15 +215,13 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {SAMPLE_BUNDLES.map((bundle) => (
                     <CourseBundleCard
                       key={bundle.id}
                       bundle={bundle}
                       isSelected={selectedBundleId === bundle.id}
-                      onSelect={(b) =>
-                        setSelectedBundleId(selectedBundleId === b.id ? null : b.id)
-                      }
+                      onSelect={handleSelectBundle}
                       onHover={setHoveredBundle}
                     />
                   ))}
@@ -251,8 +230,8 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
             ) : (
               <>
                 <div>
-                  <h2 className="text-2xl font-display text-foreground">Degree Audit</h2>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <h2 className="text-lg font-display text-foreground">Degree Audit</h2>
+                  <p className="text-xs text-muted-foreground mt-1">
                     Click a course to mark it as completed.
                   </p>
                 </div>
@@ -276,9 +255,41 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                 />
               </>
             )}
-          </div>
+          </aside>
+
+          {/* RIGHT: Calendar — 70% */}
+          <main className="flex-1 min-w-0 space-y-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Calendar className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-display text-foreground">Fall Semester</h2>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Required courses are pre-filled. Add a bundle from the left to fill remaining slots.
+              </p>
+            </div>
+
+            <Card className="p-5 bg-card/80 backdrop-blur-sm">
+              <CourseCalendar
+                requiredCourses={REQUIRED_COURSES}
+                selectedElectives={selectedElectives}
+                hoveredBundle={hoveredBundle}
+                animatingIds={animatingIds}
+              />
+            </Card>
+          </main>
         </div>
       </div>
+
+      <ExportReviewModal
+        open={showExportModal}
+        onOpenChange={setShowExportModal}
+        requiredCourses={REQUIRED_COURSES}
+        selectedBundle={selectedBundle || null}
+        selectedElectives={selectedElectives}
+        program={profile.program}
+        onConfirmDownload={handleDownloadSchedule}
+      />
     </div>
   );
 };
