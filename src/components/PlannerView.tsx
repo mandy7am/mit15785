@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { StudentProfile, Course, CourseBundle } from "@/types/course";
 import { REQUIRED_COURSES, SAMPLE_BUNDLES } from "@/data/mockCourses";
+import { DEFAULT_REQUIREMENTS } from "@/data/degreeRequirements";
 import CourseCalendar from "./CourseCalendar";
 import CourseBundleCard from "./CourseBundleCard";
+import DegreeAudit from "./DegreeAudit";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +18,7 @@ import {
   ArrowLeft,
   GraduationCap,
   RefreshCw,
+  ClipboardCheck,
 } from "lucide-react";
 
 interface PlannerViewProps {
@@ -26,6 +29,7 @@ interface PlannerViewProps {
 const PlannerView = ({ profile, onBack }: PlannerViewProps) => {
   const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(profile.careerGoals);
+  const [requirements, setRequirements] = useState(DEFAULT_REQUIREMENTS);
   const [showBundles, setShowBundles] = useState(true);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
@@ -142,6 +146,34 @@ const PlannerView = ({ profile, onBack }: PlannerViewProps) => {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Degree Audit */}
+        <div className="mt-12 pt-8 border-t border-border">
+          <div className="flex items-center gap-2 mb-4">
+            <ClipboardCheck className="w-5 h-5 text-primary" />
+            <h2 className="text-2xl font-display text-foreground">Degree Audit</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-6">
+            Click a course to mark it as completed. Track your progress toward graduation.
+          </p>
+          <DegreeAudit
+            requirements={requirements}
+            onToggle={(catIdx, courseIdx) => {
+              setRequirements((prev) => {
+                const updated = prev.map((cat, ci) => {
+                  if (ci !== catIdx) return cat;
+                  return {
+                    ...cat,
+                    courses: cat.courses.map((c, coIdx) =>
+                      coIdx === courseIdx ? { ...c, completed: !c.completed } : c
+                    ),
+                  };
+                });
+                return updated;
+              });
+            }}
+          />
         </div>
       </div>
     </div>
