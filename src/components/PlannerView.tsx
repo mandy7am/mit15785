@@ -39,6 +39,9 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [sidebarTab, setSidebarTab] = useState<"bundles" | "audit">("bundles");
   const [showGuide, setShowGuide] = useState(true);
   const [hoveredBundle, setHoveredBundle] = useState<CourseBundle | null>(null);
+  const [isEditingRole, setIsEditingRole] = useState(false);
+  const [editingRoleText, setEditingRoleText] = useState("");
+  const roleInputRef = useRef<HTMLInputElement>(null);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
   const selectedElectives = selectedBundle?.courses || [];
