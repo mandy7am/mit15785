@@ -9,7 +9,7 @@ interface CourseCalendarProps {
   onCourseClick?: (course: Course) => void;
 }
 
-const DAYS = ["Mon/Wed", "Tue/Thu", "Fri"];
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 const TIME_SLOTS = ["9:00–10:30", "11:00–12:30", "2:00–3:30", "4:00–5:30"];
 
 const CATEGORY_STYLES: Record<string, { bg: string; border: string; text: string }> = {
@@ -42,7 +42,7 @@ const CourseCalendar = ({ requiredCourses, selectedElectives, onCourseClick }: C
     <div className="w-full overflow-x-auto">
       <div className="min-w-[700px]">
         {/* Header */}
-        <div className="grid grid-cols-4 gap-2 mb-2">
+        <div className="grid grid-cols-6 gap-2 mb-2">
           <div className="p-3 flex items-center gap-2 text-sm font-medium text-muted-foreground">
             <Clock className="w-4 h-4" />
             Time
