@@ -60,6 +60,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [exportPulsed, setExportPulsed] = useState(false);
   const [prevBundleId, setPrevBundleId] = useState<string | null>(null);
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
+  const [showSettings, setShowSettings] = useState(false);
   const roleInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = async () => {
