@@ -180,11 +180,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                   <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => {
-                  // Open settings modal programmatically
-                  const settingsBtn = document.querySelector('[data-settings-trigger]') as HTMLButtonElement;
-                  settingsBtn?.click();
-                }}>
+                <DropdownMenuItem onClick={() => setShowSettings(true)}>
                   <Settings className="w-3.5 h-3.5 mr-2" />
                   Settings
                 </DropdownMenuItem>
@@ -195,10 +191,6 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            {/* Hidden settings trigger */}
-            <div className="hidden">
-              <SettingsModal profile={profile} onSave={(p) => { setProfile(p); setPrompt(p.careerGoals); }} />
-            </div>
           </div>
         </div>
       </header>
@@ -207,7 +199,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
         {/* Strict 30/70 split */}
         <div className="flex gap-6" style={{ minHeight: "calc(100vh - 80px)" }}>
           {/* LEFT: Bundle Gallery — 30% */}
-          <aside className="w-[30%] shrink-0 space-y-5 overflow-y-auto max-h-[calc(100vh-156px)] sticky top-[7.5rem] pr-1">
+          <aside className="w-[30%] shrink-0 space-y-5 overflow-y-auto max-h-[calc(100vh-80px)] sticky top-[4.5rem] pr-1">
             {/* Toggle buttons */}
             <div className="flex rounded-lg bg-muted p-1 gap-1">
               <button
