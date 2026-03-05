@@ -106,7 +106,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Top bar */}
-      <header className="sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-border">
+      <header className="sticky top-14 z-20 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <TreePine className="w-5 h-5 text-primary" />
@@ -146,7 +146,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
         {/* Strict 30/70 split */}
         <div className="flex gap-6" style={{ minHeight: "calc(100vh - 80px)" }}>
           {/* LEFT: Bundle Gallery — 30% */}
-          <aside className="w-[30%] shrink-0 space-y-5 overflow-y-auto max-h-[calc(100vh-100px)] sticky top-20 pr-1">
+          <aside className="w-[30%] shrink-0 space-y-5 overflow-y-auto max-h-[calc(100vh-156px)] sticky top-[7.5rem] pr-1">
             {/* Toggle buttons */}
             <div className="flex rounded-lg bg-muted p-1 gap-1">
               <button
