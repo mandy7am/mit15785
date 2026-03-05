@@ -127,13 +127,16 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="sticky top-14 z-20 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      {/* Unified top bar */}
+      <header className="sticky top-0 z-50 bg-accent/60 backdrop-blur-md border-b border-border">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between">
+          {/* Left: Branding */}
           <div className="flex items-center gap-2">
             <TreePine className="w-5 h-5 text-primary" />
             <span className="font-display text-lg text-foreground">Course Planner</span>
           </div>
+
+          {/* Center-right: Actions */}
           <div className="flex items-center gap-3">
             <Badge variant="secondary" className="gap-1">
               <GraduationCap className="w-3 h-3" />
@@ -159,7 +162,43 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               <BookOpen className="w-3 h-3" />
               {totalCredits} credits
             </Badge>
-            <SettingsModal profile={profile} onSave={(p) => { setProfile(p); setPrompt(p.careerGoals); }} />
+
+            {/* Right: User dropdown */}
+            <div className="w-px h-5 bg-border mx-1" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground">
+                  <User className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline text-xs max-w-[140px] truncate">
+                    {user?.email || "Account"}
+                  </span>
+                  <ChevronDown className="w-3 h-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <div className="px-2 py-1.5">
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => {
+                  // Open settings modal programmatically
+                  const settingsBtn = document.querySelector('[data-settings-trigger]') as HTMLButtonElement;
+                  settingsBtn?.click();
+                }}>
+                  <Settings className="w-3.5 h-3.5 mr-2" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                  <LogOut className="w-3.5 h-3.5 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {/* Hidden settings trigger */}
+            <div className="hidden">
+              <SettingsModal profile={profile} onSave={(p) => { setProfile(p); setPrompt(p.careerGoals); }} />
+            </div>
           </div>
         </div>
       </header>
