@@ -46,6 +46,8 @@ interface PlannerViewProps {
 }
 
 const PlannerView = ({ initialProfile }: PlannerViewProps) => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<StudentProfile>(initialProfile || DEFAULT_PROFILE);
   const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(profile.careerGoals);
@@ -59,6 +61,12 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [prevBundleId, setPrevBundleId] = useState<string | null>(null);
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
   const roleInputRef = useRef<HTMLInputElement>(null);
+
+  const handleLogout = async () => {
+    await signOut();
+    toast({ title: "Signed out", description: "See you next time!" });
+    navigate("/auth");
+  };
 
   // Trigger pulse animation when a bundle is first selected
   useEffect(() => {
