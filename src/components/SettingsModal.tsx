@@ -18,10 +18,14 @@ const PROGRAMS = [
 interface SettingsModalProps {
   profile: StudentProfile;
   onSave: (profile: StudentProfile) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-const SettingsModal = ({ profile, onSave }: SettingsModalProps) => {
-  const [open, setOpen] = useState(false);
+const SettingsModal = ({ profile, onSave, open: controlledOpen, onOpenChange: controlledOnOpenChange }: SettingsModalProps) => {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = controlledOnOpenChange || setInternalOpen;
   const [program, setProgram] = useState(profile.program);
   const [graduationYear, setGraduationYear] = useState(profile.graduationYear);
   const [careerGoals, setCareerGoals] = useState(profile.careerGoals);
@@ -35,11 +39,6 @@ const SettingsModal = ({ profile, onSave }: SettingsModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Settings className="w-4 h-4" />
-        </Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display text-xl">Profile & Settings</DialogTitle>

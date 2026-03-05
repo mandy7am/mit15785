@@ -344,6 +344,13 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
         program={profile.program}
         onConfirmDownload={handleDownloadSchedule}
       />
+
+      <SettingsModal
+        profile={profile}
+        onSave={(p) => { setProfile(p); setPrompt(p.careerGoals); }}
+        open={showSettings}
+        onOpenChange={setShowSettings}
+      />
     </div>
   );
 };
