@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { StudentProfile } from "@/types/course";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Upload, BookOpen, FileText } from "lucide-react";
+import { Upload, BookOpen, FileText } from "lucide-react";
 
 const PROGRAMS = [
   "MBA",
@@ -18,10 +18,14 @@ const PROGRAMS = [
 interface SettingsModalProps {
   profile: StudentProfile;
   onSave: (profile: StudentProfile) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-const SettingsModal = ({ profile, onSave }: SettingsModalProps) => {
-  const [open, setOpen] = useState(false);
+const SettingsModal = ({ profile, onSave, open: controlledOpen, onOpenChange: controlledOnOpenChange }: SettingsModalProps) => {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = controlledOnOpenChange || setInternalOpen;
   const [program, setProgram] = useState(profile.program);
   const [graduationYear, setGraduationYear] = useState(profile.graduationYear);
   const [careerGoals, setCareerGoals] = useState(profile.careerGoals);
@@ -35,11 +39,6 @@ const SettingsModal = ({ profile, onSave }: SettingsModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Settings className="w-4 h-4" />
-        </Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display text-xl">Profile & Settings</DialogTitle>

@@ -1,4 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 import { StudentProfile, Course, CourseBundle } from "@/types/course";
 import { REQUIRED_COURSES, SAMPLE_BUNDLES } from "@/data/mockCourses";
 import { DEFAULT_REQUIREMENTS } from "@/data/degreeRequirements";
@@ -11,6 +14,13 @@ import { Badge } from "@/components/ui/badge";
 import SettingsModal from "./SettingsModal";
 import ExportReviewModal from "./ExportReviewModal";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   TreePine,
   Calendar,
   Sparkles,
@@ -18,6 +28,10 @@ import {
   GraduationCap,
   ClipboardCheck,
   Download,
+  User,
+  LogOut,
+  Settings,
+  ChevronDown,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
@@ -32,6 +46,8 @@ interface PlannerViewProps {
 }
 
 const PlannerView = ({ initialProfile }: PlannerViewProps) => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<StudentProfile>(initialProfile || DEFAULT_PROFILE);
   const [selectedBundleId, setSelectedBundleId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(profile.careerGoals);
@@ -44,7 +60,14 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [exportPulsed, setExportPulsed] = useState(false);
   const [prevBundleId, setPrevBundleId] = useState<string | null>(null);
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
+  const [showSettings, setShowSettings] = useState(false);
   const roleInputRef = useRef<HTMLInputElement>(null);
+
+  const handleLogout = async () => {
+    await signOut();
+    toast({ title: "Signed out", description: "See you next time!" });
+    navigate("/auth");
+  };
 
   // Trigger pulse animation when a bundle is first selected
   useEffect(() => {
@@ -105,13 +128,16 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top bar */}
-      <header className="sticky top-14 z-20 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      {/* Unified top bar */}
+      <header className="sticky top-0 z-50 bg-accent/60 backdrop-blur-md border-b border-border">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between">
+          {/* Left: Branding */}
           <div className="flex items-center gap-2">
             <TreePine className="w-5 h-5 text-primary" />
             <span className="font-display text-lg text-foreground">Course Planner</span>
           </div>
+
+          {/* Center-right: Actions */}
           <div className="flex items-center gap-3">
             <Badge variant="secondary" className="gap-1">
               <GraduationCap className="w-3 h-3" />
@@ -137,7 +163,35 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
               <BookOpen className="w-3 h-3" />
               {totalCredits} credits
             </Badge>
-            <SettingsModal profile={profile} onSave={(p) => { setProfile(p); setPrompt(p.careerGoals); }} />
+
+            {/* Right: User dropdown */}
+            <div className="w-px h-5 bg-border mx-1" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground">
+                  <User className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline text-xs max-w-[140px] truncate">
+                    {user?.email || "Account"}
+                  </span>
+                  <ChevronDown className="w-3 h-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <div className="px-2 py-1.5">
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setShowSettings(true)}>
+                  <Settings className="w-3.5 h-3.5 mr-2" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                  <LogOut className="w-3.5 h-3.5 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
@@ -146,7 +200,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
         {/* Strict 30/70 split */}
         <div className="flex gap-6" style={{ minHeight: "calc(100vh - 80px)" }}>
           {/* LEFT: Bundle Gallery — 30% */}
-          <aside className="w-[30%] shrink-0 space-y-5 overflow-y-auto max-h-[calc(100vh-156px)] sticky top-[7.5rem] pr-1">
+          <aside className="w-[30%] shrink-0 space-y-5 overflow-y-auto max-h-[calc(100vh-80px)] sticky top-[4.5rem] pr-1">
             {/* Toggle buttons */}
             <div className="flex rounded-lg bg-muted p-1 gap-1">
               <button
@@ -289,6 +343,13 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
         selectedElectives={selectedElectives}
         program={profile.program}
         onConfirmDownload={handleDownloadSchedule}
+      />
+
+      <SettingsModal
+        profile={profile}
+        onSave={(p) => { setProfile(p); setPrompt(p.careerGoals); }}
+        open={showSettings}
+        onOpenChange={setShowSettings}
       />
     </div>
   );
