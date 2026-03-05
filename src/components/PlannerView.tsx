@@ -1,4 +1,7 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "@/hooks/use-toast";
 import { StudentProfile, Course, CourseBundle } from "@/types/course";
 import { REQUIRED_COURSES, SAMPLE_BUNDLES } from "@/data/mockCourses";
 import { DEFAULT_REQUIREMENTS } from "@/data/degreeRequirements";
@@ -11,6 +14,13 @@ import { Badge } from "@/components/ui/badge";
 import SettingsModal from "./SettingsModal";
 import ExportReviewModal from "./ExportReviewModal";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   TreePine,
   Calendar,
   Sparkles,
@@ -18,6 +28,10 @@ import {
   GraduationCap,
   ClipboardCheck,
   Download,
+  User,
+  LogOut,
+  Settings,
+  ChevronDown,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {

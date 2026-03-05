@@ -1,14 +1,16 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { LogOut, GraduationCap } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  if (!user) return null;
+  // Hide global navbar on the planner page — it has its own unified header
+  if (!user || location.pathname === "/") return null;
 
   const handleLogout = async () => {
     await signOut();
