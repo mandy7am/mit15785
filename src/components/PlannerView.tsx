@@ -43,6 +43,7 @@ import {
   LogOut,
   Settings,
   ChevronDown,
+  Pencil,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
