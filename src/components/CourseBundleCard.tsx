@@ -40,6 +40,12 @@ const CourseBundleCard = ({ bundle, isSelected, onSelect, onHover }: CourseBundl
         </div>
       </div>
 
+      {bundle.targetRole && (
+        <Badge variant="secondary" className="mb-3 text-xs">
+          {bundle.targetRole}
+        </Badge>
+      )}
+
 
       <div className="space-y-1.5 mb-4">
         {bundle.courses.map((course) => {
