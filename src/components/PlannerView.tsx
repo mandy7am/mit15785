@@ -317,10 +317,15 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                   variant="outline"
                   size="sm"
                   className="w-full gap-2 mt-4 border-dashed"
-                  onClick={() => toast({ title: "Coming soon", description: "Manual course selection will be available shortly." })}
+                  onClick={() => setShowManualModal(true)}
                 >
                   <Plus className="w-4 h-4" />
                   Add Courses Manually
+                  {manualCourses.length > 0 && (
+                    <Badge variant="secondary" className="ml-1 px-1.5 py-0 rounded-full h-5 min-w-5 flex items-center justify-center bg-primary/10 text-primary hover:bg-primary/20">
+                      {manualCourses.length}
+                    </Badge>
+                  )}
                 </Button>
               </>
             ) : (
