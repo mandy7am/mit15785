@@ -43,7 +43,7 @@ import {
   LogOut,
   Settings,
   ChevronDown,
-  Pencil,
+  Pencil, // edit icon for program badge
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
