@@ -152,9 +152,14 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
 
           {/* Center-right: Actions */}
           <div className="flex items-center gap-3">
-            <Badge variant="secondary" className="gap-1">
+            <Badge
+              variant="secondary"
+              className="gap-1 cursor-pointer group/badge hover:bg-secondary/80 transition-colors"
+              onClick={() => setShowSwitchModal(true)}
+            >
               <GraduationCap className="w-3 h-3" />
               {profile.program}
+              <Pencil className="w-2.5 h-2.5 opacity-0 group-hover/badge:opacity-70 transition-opacity" />
             </Badge>
             <Button
               variant={selectedBundleId ? "default" : "outline"}
