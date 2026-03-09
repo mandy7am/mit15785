@@ -31,6 +31,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ManualCourseModal from "./ManualCourseModal";
 import {
   TreePine,
   Calendar,
@@ -76,6 +77,8 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
   const [showSettings, setShowSettings] = useState(false);
   const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [manualCourses, setManualCourses] = useState<Course[]>([]);
   const roleInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = async () => {
@@ -98,7 +101,13 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
   }, [selectedBundleId, prevBundleId]);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
-  const selectedElectives = selectedBundle?.courses || [];
+  const bundleCourses = selectedBundle?.courses || [];
+  
+  // Combine bundle courses and manual courses, avoiding duplicates by ID
+  const selectedElectives = [
+    ...bundleCourses,
+    ...manualCourses.filter(mc => !bundleCourses.find(bc => bc.id === mc.id))
+  ];
 
   const totalCredits =
     REQUIRED_COURSES.reduce((s, c) => s + c.credits, 0) +
@@ -308,10 +317,15 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                   variant="outline"
                   size="sm"
                   className="w-full gap-2 mt-4 border-dashed"
-                  onClick={() => toast({ title: "Coming soon", description: "Manual course selection will be available shortly." })}
+                  onClick={() => setShowManualModal(true)}
                 >
                   <Plus className="w-4 h-4" />
                   Add Courses Manually
+                  {manualCourses.length > 0 && (
+                    <Badge variant="secondary" className="ml-1 px-1.5 py-0 rounded-full h-5 min-w-5 flex items-center justify-center bg-primary/10 text-primary hover:bg-primary/20">
+                      {manualCourses.length}
+                    </Badge>
+                  )}
                 </Button>
               </>
             ) : (
@@ -386,6 +400,19 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
       />
 
       <AiAdvisor />
+
+      <ManualCourseModal
+        open={showManualModal}
+        onOpenChange={setShowManualModal}
+        selectedCourses={manualCourses}
+        onSave={(courses) => {
+          setManualCourses(courses);
+          // Trigger stagger animation for newly added courses
+          const newCourseIds = new Set(courses.map(c => c.id));
+          setAnimatingIds(newCourseIds);
+          setTimeout(() => setAnimatingIds(new Set()), 800);
+        }}
+      />
 
       <AlertDialog open={showSwitchModal} onOpenChange={setShowSwitchModal}>
         <AlertDialogContent className="bg-background backdrop-blur-sm border-border sm:rounded-xl">
