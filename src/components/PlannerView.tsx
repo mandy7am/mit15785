@@ -302,6 +302,16 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                     />
                   ))}
                 </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full gap-2 mt-4 border-dashed"
+                  onClick={() => toast({ title: "Coming soon", description: "Manual course selection will be available shortly." })}
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Courses Manually
+                </Button>
               </>
             ) : (
               <>
