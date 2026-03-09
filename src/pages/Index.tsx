@@ -15,13 +15,20 @@ const Index = () => {
     setStep("planner");
   };
 
+  const handleSwitchProgram = () => {
+    setProfile(null);
+    setStep("setup");
+  };
+
   return (
     <>
       {step === "welcome" && <WelcomeScreen onStart={() => setStep("setup")} />}
       {step === "setup" && (
         <SetupWizard onComplete={handleSetupComplete} onBack={() => setStep("welcome")} />
       )}
-      {step === "planner" && <PlannerView initialProfile={profile} />}
+      {step === "planner" && (
+        <PlannerView initialProfile={profile} onSwitchProgram={handleSwitchProgram} />
+      )}
     </>
   );
 };

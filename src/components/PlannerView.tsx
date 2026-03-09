@@ -12,6 +12,16 @@ import DegreeAudit from "./DegreeAudit";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import SettingsModal from "./SettingsModal";
 import ExportReviewModal from "./ExportReviewModal";
 import {
@@ -33,6 +43,7 @@ import {
   LogOut,
   Settings,
   ChevronDown,
+  Pencil,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
@@ -44,9 +55,10 @@ const DEFAULT_PROFILE: StudentProfile = {
 
 interface PlannerViewProps {
   initialProfile?: StudentProfile | null;
+  onSwitchProgram?: () => void;
 }
 
-const PlannerView = ({ initialProfile }: PlannerViewProps) => {
+const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<StudentProfile>(initialProfile || DEFAULT_PROFILE);
@@ -62,6 +74,7 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
   const [prevBundleId, setPrevBundleId] = useState<string | null>(null);
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
   const [showSettings, setShowSettings] = useState(false);
+  const [showSwitchModal, setShowSwitchModal] = useState(false);
   const roleInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = async () => {
@@ -140,9 +153,14 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
 
           {/* Center-right: Actions */}
           <div className="flex items-center gap-3">
-            <Badge variant="secondary" className="gap-1">
+            <Badge
+              variant="secondary"
+              className="gap-1 cursor-pointer group/badge hover:bg-secondary/80 transition-colors"
+              onClick={() => setShowSwitchModal(true)}
+            >
               <GraduationCap className="w-3 h-3" />
               {profile.program}
+              <Pencil className="w-2.5 h-2.5 opacity-0 group-hover/badge:opacity-70 transition-opacity" />
             </Badge>
             <Button
               variant={selectedBundleId ? "default" : "outline"}
@@ -354,6 +372,28 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
       />
 
       <AiAdvisor />
+
+      <AlertDialog open={showSwitchModal} onOpenChange={setShowSwitchModal}>
+        <AlertDialogContent className="bg-background backdrop-blur-sm border-border sm:rounded-xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-display">Switch Academic Program?</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-muted-foreground">
+              Returning to the selection screen will clear your current draft for the{" "}
+              <span className="font-semibold text-foreground">{profile.program}</span> planner.
+              Do you want to continue?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-lg">Stay in {profile.program}</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-[hsl(var(--deep-forest))] hover:bg-[hsl(var(--deep-forest))]/90 text-white rounded-lg"
+              onClick={() => onSwitchProgram?.()}
+            >
+              Switch Program
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
