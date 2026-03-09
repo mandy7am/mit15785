@@ -401,6 +401,19 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
 
       <AiAdvisor />
 
+      <ManualCourseModal
+        open={showManualModal}
+        onOpenChange={setShowManualModal}
+        selectedCourses={manualCourses}
+        onSave={(courses) => {
+          setManualCourses(courses);
+          // Trigger stagger animation for newly added courses
+          const newCourseIds = new Set(courses.map(c => c.id));
+          setAnimatingIds(newCourseIds);
+          setTimeout(() => setAnimatingIds(new Set()), 800);
+        }}
+      />
+
       <AlertDialog open={showSwitchModal} onOpenChange={setShowSwitchModal}>
         <AlertDialogContent className="bg-background backdrop-blur-sm border-border sm:rounded-xl">
           <AlertDialogHeader>
