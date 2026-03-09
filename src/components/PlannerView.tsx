@@ -101,7 +101,13 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
   }, [selectedBundleId, prevBundleId]);
 
   const selectedBundle = SAMPLE_BUNDLES.find((b) => b.id === selectedBundleId);
-  const selectedElectives = selectedBundle?.courses || [];
+  const bundleCourses = selectedBundle?.courses || [];
+  
+  // Combine bundle courses and manual courses, avoiding duplicates by ID
+  const selectedElectives = [
+    ...bundleCourses,
+    ...manualCourses.filter(mc => !bundleCourses.find(bc => bc.id === mc.id))
+  ];
 
   const totalCredits =
     REQUIRED_COURSES.reduce((s, c) => s + c.credits, 0) +
