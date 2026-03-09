@@ -31,6 +31,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ManualCourseModal from "./ManualCourseModal";
 import {
   TreePine,
   Calendar,
