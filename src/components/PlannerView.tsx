@@ -77,6 +77,8 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
   const [showSettings, setShowSettings] = useState(false);
   const [showSwitchModal, setShowSwitchModal] = useState(false);
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [manualCourses, setManualCourses] = useState<Course[]>([]);
   const roleInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = async () => {
