@@ -352,6 +352,8 @@ const PlannerView = ({ initialProfile }: PlannerViewProps) => {
         open={showSettings}
         onOpenChange={setShowSettings}
       />
+
+      <AiAdvisor />
     </div>
   );
 };
