@@ -44,6 +44,7 @@ import {
   Settings,
   ChevronDown,
   Pencil, // edit icon for program badge
+  Plus,
 } from "lucide-react";
 
 const DEFAULT_PROFILE: StudentProfile = {
