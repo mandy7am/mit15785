@@ -44,9 +44,10 @@ const DEFAULT_PROFILE: StudentProfile = {
 
 interface PlannerViewProps {
   initialProfile?: StudentProfile | null;
+  onSwitchProgram?: () => void;
 }
 
-const PlannerView = ({ initialProfile }: PlannerViewProps) => {
+const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<StudentProfile>(initialProfile || DEFAULT_PROFILE);
