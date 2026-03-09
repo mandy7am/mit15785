@@ -371,6 +371,28 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
       />
 
       <AiAdvisor />
+
+      <AlertDialog open={showSwitchModal} onOpenChange={setShowSwitchModal}>
+        <AlertDialogContent className="bg-background backdrop-blur-sm border-border sm:rounded-xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-display">Switch Academic Program?</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-muted-foreground">
+              Returning to the selection screen will clear your current draft for the{" "}
+              <span className="font-semibold text-foreground">{profile.program}</span> planner.
+              Do you want to continue?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-lg">Stay in {profile.program}</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-[hsl(var(--deep-forest))] hover:bg-[hsl(var(--deep-forest))]/90 text-white rounded-lg"
+              onClick={() => onSwitchProgram?.()}
+            >
+              Switch Program
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
