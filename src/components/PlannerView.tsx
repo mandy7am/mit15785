@@ -286,6 +286,9 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                     )}
                     <Sparkles className="w-4 h-4 text-primary shrink-0" />
                   </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Pick one bundle to auto-fill your electives, or add courses manually below.
+                  </p>
                 </div>
 
                 <div className="space-y-3">
