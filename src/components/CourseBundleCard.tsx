@@ -33,13 +33,18 @@ const CourseBundleCard = ({ bundle, isSelected, onSelect, onHover }: CourseBundl
       <div className="flex items-start justify-between mb-3">
         <div className="min-w-0">
           <h3 className="font-display text-base text-foreground">{bundle.name}</h3>
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{bundle.description}</p>
         </div>
         <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-accent shrink-0 ml-2">
           <Sparkles className="w-3 h-3 text-primary" />
           <span className="text-xs font-medium text-accent-foreground">{bundle.matchScore}%</span>
         </div>
       </div>
+
+      {bundle.targetRole && (
+        <Badge variant="secondary" className="mb-3 text-xs">
+          {bundle.targetRole}
+        </Badge>
+      )}
 
 
       <div className="space-y-1.5 mb-4">
