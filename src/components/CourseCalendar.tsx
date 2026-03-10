@@ -39,6 +39,7 @@ const CourseCalendar = ({
   selectedElectives,
   hoveredBundle,
   onCourseClick,
+  onOpenSlotClick,
   animatingIds,
 }: CourseCalendarProps) => {
   const allCourses = [...requiredCourses, ...selectedElectives];
