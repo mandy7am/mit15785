@@ -138,7 +138,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
           </div>
 
           {/* Program Grid */}
-          <div className="grid grid-cols-5 gap-3 mb-8">
+          <div className="grid grid-cols-5 gap-2 mb-5">
             {PROGRAMS.map((p) => {
               const Icon = p.icon;
               const selected = program === p.label;
