@@ -3,7 +3,7 @@ import { CourseBundle, Course } from "@/types/course";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Check, ChevronDown, ChevronUp, Zap, Undo2, Plus } from "lucide-react";
+import { Sparkles, Check, ChevronDown, ChevronUp, Zap, Undo2, Plus, Star, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CourseBundleCardProps {
@@ -62,9 +62,23 @@ const CourseBundleCard = ({ bundle, isSelected, onSelect, onHover }: CourseBundl
                     : "bg-muted/50 hover:bg-muted/80"
                 }`}
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-xs font-medium text-primary shrink-0">{course.code}</span>
-                  <span className="text-xs text-foreground truncate">{course.title}</span>
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-primary shrink-0">{course.code}</span>
+                    <span className="text-xs text-foreground truncate">{course.title}</span>
+                  </div>
+                  {course.evaluation && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                        <User className="w-2.5 h-2.5" />
+                        {course.evaluation.professor}
+                      </span>
+                      <span className="text-[10px] text-amber-500 flex items-center gap-0.5">
+                        <Star className="w-2.5 h-2.5 fill-amber-500" />
+                        {course.evaluation.rating}/7
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0 ml-2">
                   <span className="text-[10px] text-muted-foreground hidden sm:inline">
