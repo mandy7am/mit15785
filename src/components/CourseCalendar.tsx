@@ -10,6 +10,7 @@ interface CourseCalendarProps {
   selectedElectives: Course[];
   hoveredBundle?: CourseBundle | null;
   onCourseClick?: (course: Course) => void;
+  onOpenSlotClick?: () => void;
   /** Keys of recently-added elective IDs for stagger animation */
   animatingIds?: Set<string>;
 }
