@@ -146,7 +146,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                 <button
                   key={p.id}
                   onClick={() => setProgram(p.label)}
-                  className={`group relative flex flex-col items-center gap-3 rounded-xl border px-4 py-5 transition-all duration-300 cursor-pointer ${
+                  className={`group relative flex flex-col items-center gap-2 rounded-xl border px-3 py-3 transition-all duration-300 cursor-pointer ${
                     selected
                       ? "border-primary/60 bg-accent/40 shadow-[0_0_20px_-6px_hsl(var(--primary)/0.25)]"
                       : "border-border/60 bg-card/60 hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5"
