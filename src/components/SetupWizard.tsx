@@ -135,7 +135,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
         <div className="w-full max-w-2xl animate-slide-up">
           <div className="text-center mb-10">
             <h1 className="text-3xl md:text-4xl font-display text-foreground mb-3">Tell us about yourself</h1>
-            <p className="text-muted-foreground text-sm">Select your journey at Sloan to help us calibrate your compass.</p>
+            <p className="text-muted-foreground text-sm">Select your program and dream role.</p>
           </div>
 
           {/* Program Grid */}
