@@ -47,7 +47,7 @@ export const SAMPLE_BUNDLES: CourseBundle[] = [
     matchScore: 95,
     courses: [
       { ...ELECTIVE_COURSES[8], aiReason: "Understanding AI & robotics applications is essential for modern product managers who need to evaluate technical feasibility and drive data-informed roadmaps." },
-      { ...ELECTIVE_COURSES[6], aiReason: "The Analytics Edge builds the data science fluency required to lead cross-functional tech initiatives at scale." },
+      { ...ELECTIVE_COURSES[7], aiReason: "Analytics for a Better World builds the predictive and prescriptive analytics fluency required to lead cross-functional tech initiatives at scale." },
       { ...ELECTIVE_COURSES[9], aiReason: "Quantum computing is an emerging frontier — understanding its business implications positions you ahead of the curve in tech strategy." },
     ],
   },
@@ -72,7 +72,7 @@ export const SAMPLE_BUNDLES: CourseBundle[] = [
     courses: [
       { ...ELECTIVE_COURSES[16], aiReason: "Breakthrough Ventures teaches you to build effective business models in frontier markets — a key skill for scrappy founders." },
       { ...ELECTIVE_COURSES[10], aiReason: "Storytelling is how founders pitch investors, align teams, and sell their vision. This builds that muscle." },
-      { ...ELECTIVE_COURSES[8], aiReason: "Understanding AI & robotics trends lets you identify where automation can give your startup an unfair advantage." },
+      { ...ELECTIVE_COURSES[9], aiReason: "Quantum computing literacy lets founders identify where emerging tech can give their startup an unfair advantage." },
     ],
   },
 ];
