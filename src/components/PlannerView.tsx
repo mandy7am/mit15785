@@ -34,7 +34,6 @@ import {
 import ManualCourseModal from "./ManualCourseModal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
-  TreePine,
   Calendar,
   Sparkles,
   BookOpen,
@@ -158,7 +157,11 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between">
           {/* Left: Branding */}
           <div className="flex items-center gap-2">
-            <TreePine className="w-5 h-5 text-primary" />
+            <img
+              src={`${import.meta.env.BASE_URL}mit-logo.jpg`}
+              alt="MIT logo"
+              className="h-8 w-auto"
+            />
             <span className="font-display text-lg text-foreground">Course Planner</span>
           </div>
 
