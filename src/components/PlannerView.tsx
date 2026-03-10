@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AiAdvisor from "./AiAdvisor";
+
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { StudentProfile, Course, CourseBundle } from "@/types/course";
@@ -410,7 +410,7 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
         onOpenChange={setShowSettings}
       />
 
-      <AiAdvisor />
+      
 
       <ManualCourseModal
         open={showManualModal}
