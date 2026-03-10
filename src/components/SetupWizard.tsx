@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check, Sparkles, Compass, GraduationCap, TrendingUp, Briefcase, Globe, BarChart3, RefreshCw, CheckCircle2, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check, Sparkles, Compass, GraduationCap, TrendingUp, Briefcase, Globe, BarChart3, RefreshCw, CheckCircle2, Loader2, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { StudentProfile } from "@/types/course";
