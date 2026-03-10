@@ -11,11 +11,11 @@ interface SetupWizardProps {
 }
 
 const PROGRAMS = [
-  { id: "mba", label: "MBA", icon: GraduationCap, desc: "Master of Business Administration" },
-  { id: "mfin", label: "MFin", icon: TrendingUp, desc: "Master of Finance" },
-  { id: "mban", label: "MBAn", icon: BarChart3, desc: "Master of Business Analytics" },
-  { id: "emba", label: "EMBA", icon: Briefcase, desc: "Executive MBA" },
-  { id: "sfmba", label: "SFMBA", icon: Globe, desc: "Sloan Fellows MBA" },
+  { id: "mba", label: "MBA", icon: GraduationCap },
+  { id: "mfin", label: "MFin", icon: TrendingUp },
+  { id: "mban", label: "MBAn", icon: BarChart3 },
+  { id: "emba", label: "EMBA", icon: Briefcase },
+  { id: "sfmba", label: "SFMBA", icon: Globe },
 ];
 
 const ROLE_TAGS = [
