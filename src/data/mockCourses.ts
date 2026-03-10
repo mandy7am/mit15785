@@ -72,7 +72,7 @@ export const SAMPLE_BUNDLES: CourseBundle[] = [
     courses: [
       { ...ELECTIVE_COURSES[16], aiReason: "Breakthrough Ventures teaches you to build effective business models in frontier markets — a key skill for scrappy founders." },
       { ...ELECTIVE_COURSES[10], aiReason: "Storytelling is how founders pitch investors, align teams, and sell their vision. This builds that muscle." },
-      { ...ELECTIVE_COURSES[8], aiReason: "Understanding AI & robotics trends lets you identify where automation can give your startup an unfair advantage." },
+      { ...ELECTIVE_COURSES[9], aiReason: "Quantum computing literacy lets founders identify where emerging tech can give their startup an unfair advantage." },
     ],
   },
 ];
