@@ -172,8 +172,8 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
           </div>
 
           {/* Graduation Year Pill Toggle */}
-          <div className="mb-8">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">Graduation Year</label>
+          <div className="mb-5">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">Graduation Year</label>
             <div className="inline-flex rounded-full border border-border/60 bg-card/60 p-1 gap-0.5">
               {YEARS.map((y) => (
                 <button
