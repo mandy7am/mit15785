@@ -263,13 +263,35 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
               <label className="text-sm font-semibold text-foreground">What's your dream role?</label>
               <span className="text-[10px] text-muted-foreground/60 ml-auto italic">optional</span>
             </div>
-            <textarea
-              value={careerGoals}
-              onChange={(e) => setCareerGoals(e.target.value)}
-              placeholder="e.g. Product Manager in Climate Tech"
-              rows={1}
-              className="w-full rounded-xl border border-border/60 bg-card/80 px-4 py-3 text-base font-medium text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition-all resize-none"
-            />
+            <div className={`relative rounded-xl transition-all duration-300 ${
+              voiceSuccess ? "ring-2 ring-[rgba(217,255,0,0.8)] shadow-[0_0_12px_rgba(217,255,0,0.4)]" : ""
+            }`}>
+              <textarea
+                value={careerGoals}
+                onChange={(e) => setCareerGoals(e.target.value)}
+                placeholder="Describe your dream role (e.g., Senior AI Product Manager at a FinTech startup)..."
+                rows={1}
+                className={`w-full rounded-xl border bg-card/80 px-4 py-3 pr-12 text-base font-medium text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-all resize-none ${
+                  isListening
+                    ? "border-[rgba(217,255,0,0.8)] ring-2 ring-[rgba(217,255,0,0.4)]"
+                    : "border-border/60 focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                }`}
+              />
+              {speechSupported && (
+                <button
+                  type="button"
+                  onClick={isListening ? stopListening : startListening}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full transition-all duration-300 ${
+                    isListening
+                      ? "bg-[rgba(217,255,0,0.2)] text-[rgba(217,255,0,1)] animate-[export-glow_1.5s_ease-in-out_infinite]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                  }`}
+                  title={isListening ? "Stop recording" : "Speak your dream role"}
+                >
+                  <Mic className="w-4 h-4" />
+                </button>
+              )}
+            </div>
             <div className="flex flex-wrap gap-2">
               {ROLE_TAGS.map((tag) => (
                 <button
