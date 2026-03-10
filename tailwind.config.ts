@@ -99,6 +99,10 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
         },
+        "export-glow": {
+          "0%, 100%": { boxShadow: "0 0 4px rgba(217, 255, 0, 0.4)" },
+          "50%": { boxShadow: "0 0 12px rgba(217, 255, 0, 0.7)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -106,6 +110,7 @@ export default {
         "fade-in": "fade-in 0.6s ease-out forwards",
         "slide-up": "slide-up 0.8s ease-out forwards",
         "gentle-pulse": "gentle-pulse 3s ease-in-out infinite",
+        "export-glow": "export-glow 2s ease-in-out infinite",
       },
     },
   },
