@@ -294,7 +294,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
         <div className="w-full max-w-lg animate-slide-up">
           <div className="text-center mb-10">
             <h1 className="text-3xl font-display text-foreground mb-3">Sync the MIT Catalog</h1>
-            <p className="text-muted-foreground text-sm">We'll pull Department 15 (Sloan) courses directly from MIT.</p>
+            <p className="text-muted-foreground text-sm">We'll pull Sloan courses directly from MIT.</p>
           </div>
 
           <div className="rounded-2xl border border-border/60 bg-card/80 p-10 text-center space-y-6">
