@@ -133,12 +133,12 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
       {/* Step 0: Profile */}
       {step === 0 && (
         <div className="w-full max-w-2xl animate-slide-up">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-display text-foreground">Select your Sloan program and dream role</h1>
+          <div className="text-center mb-6">
+            <h1 className="text-2xl md:text-3xl font-display text-foreground">Select your Sloan program and dream role</h1>
           </div>
 
           {/* Program Grid */}
-          <div className="grid grid-cols-5 gap-3 mb-8">
+          <div className="grid grid-cols-5 gap-2 mb-5">
             {PROGRAMS.map((p) => {
               const Icon = p.icon;
               const selected = program === p.label;
@@ -146,13 +146,13 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                 <button
                   key={p.id}
                   onClick={() => setProgram(p.label)}
-                  className={`group relative flex flex-col items-center gap-3 rounded-xl border px-4 py-5 transition-all duration-300 cursor-pointer ${
+                  className={`group relative flex flex-col items-center gap-2 rounded-xl border px-3 py-3 transition-all duration-300 cursor-pointer ${
                     selected
                       ? "border-primary/60 bg-accent/40 shadow-[0_0_20px_-6px_hsl(var(--primary)/0.25)]"
                       : "border-border/60 bg-card/60 hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5"
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
                     selected ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground group-hover:text-primary/70"
                   }`}>
                     <Icon className="w-5 h-5" strokeWidth={1.5} />
@@ -172,8 +172,8 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
           </div>
 
           {/* Graduation Year Pill Toggle */}
-          <div className="mb-8">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 block">Graduation Year</label>
+          <div className="mb-5">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">Graduation Year</label>
             <div className="inline-flex rounded-full border border-border/60 bg-card/60 p-1 gap-0.5">
               {YEARS.map((y) => (
                 <button
@@ -192,7 +192,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
           </div>
 
           {/* Dream Role */}
-          <div className="rounded-2xl bg-accent/30 border border-border/40 p-6 space-y-4">
+          <div className="rounded-2xl bg-accent/30 border border-border/40 p-4 space-y-3">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-primary" />
               <label className="text-sm font-semibold text-foreground">What's your dream role?</label>
@@ -202,7 +202,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
               value={careerGoals}
               onChange={(e) => setCareerGoals(e.target.value)}
               placeholder="e.g. Product Manager in Climate Tech"
-              rows={2}
+              rows={1}
               className="w-full rounded-xl border border-border/60 bg-card/80 px-4 py-3 text-base font-medium text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition-all resize-none"
             />
             <div className="flex flex-wrap gap-2">
