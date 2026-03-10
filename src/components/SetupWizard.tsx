@@ -133,8 +133,8 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
       {/* Step 0: Profile */}
       {step === 0 && (
         <div className="w-full max-w-2xl animate-slide-up">
-          <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-display text-foreground">Select your Sloan program and dream role</h1>
+          <div className="text-center mb-6">
+            <h1 className="text-2xl md:text-3xl font-display text-foreground">Select your Sloan program and dream role</h1>
           </div>
 
           {/* Program Grid */}
