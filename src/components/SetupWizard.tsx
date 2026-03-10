@@ -330,7 +330,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                 </div>
                 <div>
                   <p className="text-sm text-foreground font-medium">Pull the latest Sloan course catalog</p>
-                  <p className="text-xs text-muted-foreground mt-1">Department 15 · Credits, Prerequisites & Time Slots</p>
+                  <p className="text-xs text-muted-foreground mt-1">Sloan · Credits, Prerequisites & Time Slots</p>
                 </div>
                 <Button
                   onClick={handleSyncCatalog}
