@@ -95,7 +95,21 @@ const CourseCalendar = ({
           <span className="text-xs text-foreground leading-tight font-medium">
             {course.title}
           </span>
-          <span className="text-[10px] text-muted-foreground">{course.credits} cr</span>
+          {course.evaluation && (
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                <User className="w-2.5 h-2.5" />
+                {course.evaluation.professor}
+              </span>
+              <span className="text-[10px] text-amber-500 flex items-center gap-0.5">
+                <Star className="w-2.5 h-2.5 fill-amber-500" />
+                {course.evaluation.rating}/7
+              </span>
+            </div>
+          )}
+          {!course.evaluation && (
+            <span className="text-[10px] text-muted-foreground">{course.credits} cr</span>
+          )}
         </div>
       </Card>
     );
