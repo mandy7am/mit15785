@@ -152,7 +152,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                       : "border-border/60 bg-card/60 hover:border-primary/30 hover:shadow-md hover:-translate-y-0.5"
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
                     selected ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground group-hover:text-primary/70"
                   }`}>
                     <Icon className="w-5 h-5" strokeWidth={1.5} />
