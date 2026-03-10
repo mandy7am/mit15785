@@ -377,6 +377,7 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                 selectedElectives={selectedElectives}
                 hoveredBundle={hoveredBundle}
                 animatingIds={animatingIds}
+                onOpenSlotClick={() => setShowManualModal(true)}
               />
             </Card>
           </main>
