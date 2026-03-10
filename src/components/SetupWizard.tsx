@@ -257,7 +257,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
           </div>
 
           {/* Dream Role */}
-          <div className="rounded-2xl bg-accent/30 border border-border/40 p-4 space-y-3">
+          <div className="rounded-2xl bg-accent/30 border-2 border-primary/50 p-4 space-y-3 shadow-[0_0_10px_rgba(217,255,0,0.3),inset_0_0_10px_rgba(217,255,0,0.05)]">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-primary" />
               <label className="text-sm font-semibold text-foreground">What's your dream role?</label>
