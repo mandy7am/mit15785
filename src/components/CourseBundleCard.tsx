@@ -3,7 +3,7 @@ import { CourseBundle, Course } from "@/types/course";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Check, ChevronDown, ChevronUp, Zap, Undo2, Plus } from "lucide-react";
+import { Sparkles, Check, ChevronDown, ChevronUp, Zap, Undo2, Plus, Star, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CourseBundleCardProps {
