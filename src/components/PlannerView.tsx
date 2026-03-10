@@ -410,7 +410,7 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
         onOpenChange={setShowSettings}
       />
 
-      <AiAdvisor />
+      
 
       <ManualCourseModal
         open={showManualModal}
