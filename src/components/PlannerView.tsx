@@ -296,9 +296,6 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                     )}
                     <Sparkles className="w-4 h-4 text-primary shrink-0" />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    Pick one bundle to auto-fill your electives, or add courses manually below.
-                  </p>
                 </div>
 
                 <div className="space-y-3">
@@ -366,7 +363,11 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                 <h2 className="text-2xl font-display text-foreground">Fall Semester</h2>
               </div>
               <p className="text-sm text-muted-foreground">
-                Required courses are pre-filled. Add a bundle from the left to fill remaining slots.
+                Required courses are pre-filled. Pick{" "}
+                <span className="relative inline-block px-[3px] py-[1px]" style={{ background: "rgba(217, 255, 0, 0.6)", borderRadius: "2px", boxDecorationBreak: "clone" as any }}>one bundle</span>
+                {" "}from the left to{" "}
+                <span className="relative inline-block px-[3px] py-[1px]" style={{ background: "rgba(217, 255, 0, 0.6)", borderRadius: "2px", boxDecorationBreak: "clone" as any }}>auto-fill</span>
+                {" "}your electives, or add courses manually here.
               </p>
             </div>
 
