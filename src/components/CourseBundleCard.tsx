@@ -32,7 +32,9 @@ const CourseBundleCard = ({ bundle, isSelected, onSelect, onHover }: CourseBundl
     >
       <div className="flex items-start justify-between mb-3">
         <div className="min-w-0">
-          <h3 className="font-display text-base text-foreground">{bundle.name}</h3>
+          <h3 className="font-display text-base text-foreground">
+            <span className="relative inline-block px-[3px] py-[1px]" style={{ background: "rgba(217, 255, 0, 0.6)", borderRadius: "2px" }}>{bundle.name}</span>
+          </h3>
         </div>
         <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-accent shrink-0 ml-2">
           <Sparkles className="w-3 h-3 text-primary" />
