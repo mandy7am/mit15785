@@ -1,3 +1,10 @@
+export interface CourseEvaluation {
+  professor: string;
+  rating: number; // out of 7 (MIT scale)
+  respondents: number;
+  highlights: string[];
+}
+
 export interface Course {
   id: string;
   code: string;
@@ -10,6 +17,7 @@ export interface Course {
   category?: string;
   semester?: string;
   aiReason?: string;
+  evaluation?: CourseEvaluation;
 }
 
 export interface CourseBundle {
