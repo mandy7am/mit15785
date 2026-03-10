@@ -202,7 +202,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
               value={careerGoals}
               onChange={(e) => setCareerGoals(e.target.value)}
               placeholder="e.g. Product Manager in Climate Tech"
-              rows={2}
+              rows={1}
               className="w-full rounded-xl border border-border/60 bg-card/80 px-4 py-3 text-base font-medium text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition-all resize-none"
             />
             <div className="flex flex-wrap gap-2">
