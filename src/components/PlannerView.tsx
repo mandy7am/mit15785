@@ -261,7 +261,7 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
               <>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-lg font-display text-foreground">AI Bundles for</h2>
+                    <h2 className="text-lg font-display text-foreground">Bundles for</h2>
                     {isEditingRole ? (
                       <input
                         ref={roleInputRef}
