@@ -11,11 +11,11 @@ interface SetupWizardProps {
 }
 
 const PROGRAMS = [
-  { id: "mba", label: "MBA", icon: GraduationCap, desc: "Master of Business Administration" },
-  { id: "mfin", label: "MFin", icon: TrendingUp, desc: "Master of Finance" },
-  { id: "mban", label: "MBAn", icon: BarChart3, desc: "Master of Business Analytics" },
-  { id: "emba", label: "EMBA", icon: Briefcase, desc: "Executive MBA" },
-  { id: "sfmba", label: "SFMBA", icon: Globe, desc: "Sloan Fellows MBA" },
+  { id: "mba", label: "MBA", icon: GraduationCap },
+  { id: "mfin", label: "MFin", icon: TrendingUp },
+  { id: "mban", label: "MBAn", icon: BarChart3 },
+  { id: "emba", label: "EMBA", icon: Briefcase },
+  { id: "sfmba", label: "SFMBA", icon: Globe },
 ];
 
 const ROLE_TAGS = [
@@ -160,7 +160,7 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
                   </div>
                   <div className="text-center">
                     <div className={`text-sm font-semibold ${selected ? "text-primary" : "text-foreground"}`}>{p.label}</div>
-                    <div className="text-[11px] text-muted-foreground leading-tight mt-0.5">{p.desc}</div>
+                    
                   </div>
                   {selected && (
                     <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
