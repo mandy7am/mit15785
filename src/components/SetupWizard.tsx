@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check, Sparkles, Compass, GraduationCap, TrendingUp, Briefcase, Globe, BarChart3, RefreshCw, CheckCircle2, Loader2 } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Upload, User, BookOpen, FileText, ArrowRight, ArrowLeft, Check, Sparkles, Compass, GraduationCap, TrendingUp, Briefcase, Globe, BarChart3, RefreshCw, CheckCircle2, Loader2, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { StudentProfile } from "@/types/course";
@@ -37,6 +37,71 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
   const [catalogSynced, setCatalogSynced] = useState(false);
   const [catalogCount, setCatalogCount] = useState(0);
   const [catalogError, setCatalogError] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const [voiceSuccess, setVoiceSuccess] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const speechSupported = typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
+
+  const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
+    setIsListening(false);
+  }, []);
+
+  const startListening = useCallback(() => {
+    if (!speechSupported) return;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    let finalTranscript = "";
+    let pauseTimer: ReturnType<typeof setTimeout>;
+
+    recognition.onresult = (event: any) => {
+      let interim = "";
+      finalTranscript = "";
+      for (let i = 0; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      setCareerGoals(finalTranscript || interim);
+
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(() => {
+        recognition.stop();
+      }, 1500);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+      if (finalTranscript) {
+        setCareerGoals(finalTranscript);
+        setVoiceSuccess(true);
+        setTimeout(() => setVoiceSuccess(false), 1200);
+      }
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
+  }, [speechSupported]);
+
+  useEffect(() => {
+    return () => { if (recognitionRef.current) recognitionRef.current.stop(); };
+  }, []);
 
   const steps = [
     { icon: User, label: "Profile" },
@@ -198,13 +263,35 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
               <label className="text-sm font-semibold text-foreground">What's your dream role?</label>
               <span className="text-[10px] text-muted-foreground/60 ml-auto italic">optional</span>
             </div>
-            <textarea
-              value={careerGoals}
-              onChange={(e) => setCareerGoals(e.target.value)}
-              placeholder="e.g. Product Manager in Climate Tech"
-              rows={1}
-              className="w-full rounded-xl border border-border/60 bg-card/80 px-4 py-3 text-base font-medium text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition-all resize-none"
-            />
+            <div className={`relative rounded-xl transition-all duration-300 ${
+              voiceSuccess ? "ring-2 ring-[rgba(217,255,0,0.8)] shadow-[0_0_12px_rgba(217,255,0,0.4)]" : ""
+            }`}>
+              <textarea
+                value={careerGoals}
+                onChange={(e) => setCareerGoals(e.target.value)}
+                placeholder="Describe your dream role (e.g., Senior AI Product Manager at a FinTech startup)..."
+                rows={1}
+                className={`w-full rounded-xl border bg-card/80 px-4 py-3 pr-12 text-base font-medium text-foreground placeholder:text-muted-foreground/40 focus:outline-none transition-all resize-none ${
+                  isListening
+                    ? "border-[rgba(217,255,0,0.8)] ring-2 ring-[rgba(217,255,0,0.4)]"
+                    : "border-border/60 focus:ring-2 focus:ring-primary/40 focus:border-primary/50"
+                }`}
+              />
+              {speechSupported && (
+                <button
+                  type="button"
+                  onClick={isListening ? stopListening : startListening}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full transition-all duration-300 ${
+                    isListening
+                      ? "bg-[rgba(217,255,0,0.2)] text-[rgba(217,255,0,1)] animate-[export-glow_1.5s_ease-in-out_infinite]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                  }`}
+                  title={isListening ? "Stop recording" : "Speak your dream role"}
+                >
+                  <Mic className="w-4 h-4" />
+                </button>
+              )}
+            </div>
             <div className="flex flex-wrap gap-2">
               {ROLE_TAGS.map((tag) => (
                 <button
