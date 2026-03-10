@@ -1,7 +1,7 @@
 import { Course, CourseBundle } from "@/types/course";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Plus } from "lucide-react";
+import { Clock, Plus, Star, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
 
