@@ -178,12 +178,10 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
               size="sm"
               disabled={!selectedBundleId}
               onClick={() => setShowExportModal(true)}
-              className={`gap-1.5 transition-all duration-300 ${
+              className={`gap-1.5 font-bold transition-all duration-300 ${
                 !selectedBundleId
                   ? "opacity-30 cursor-not-allowed"
-                  : exportPulsed
-                  ? "animate-[pulse_0.6s_ease-in-out_2]"
-                  : ""
+                  : "border-2 border-[rgba(217,255,0,1)] shadow-[0_0_8px_rgba(217,255,0,0.5)] animate-[export-glow_2s_ease-in-out_infinite] hover:animate-none hover:bg-[rgba(217,255,0,1)] hover:text-black hover:shadow-[0_0_16px_rgba(217,255,0,0.7)]"
               }`}
             >
               <Download className="w-3.5 h-3.5" />
