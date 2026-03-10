@@ -37,6 +37,71 @@ const SetupWizard = ({ onComplete, onBack }: SetupWizardProps) => {
   const [catalogSynced, setCatalogSynced] = useState(false);
   const [catalogCount, setCatalogCount] = useState(0);
   const [catalogError, setCatalogError] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const [voiceSuccess, setVoiceSuccess] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const speechSupported = typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
+
+  const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
+    setIsListening(false);
+  }, []);
+
+  const startListening = useCallback(() => {
+    if (!speechSupported) return;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    let finalTranscript = "";
+    let pauseTimer: ReturnType<typeof setTimeout>;
+
+    recognition.onresult = (event: any) => {
+      let interim = "";
+      finalTranscript = "";
+      for (let i = 0; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      setCareerGoals(finalTranscript || interim);
+
+      clearTimeout(pauseTimer);
+      pauseTimer = setTimeout(() => {
+        recognition.stop();
+      }, 1500);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+      if (finalTranscript) {
+        setCareerGoals(finalTranscript);
+        setVoiceSuccess(true);
+        setTimeout(() => setVoiceSuccess(false), 1200);
+      }
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
+  }, [speechSupported]);
+
+  useEffect(() => {
+    return () => { if (recognitionRef.current) recognitionRef.current.stop(); };
+  }, []);
 
   const steps = [
     { icon: User, label: "Profile" },
