@@ -47,7 +47,7 @@ export const SAMPLE_BUNDLES: CourseBundle[] = [
     matchScore: 95,
     courses: [
       { ...ELECTIVE_COURSES[8], aiReason: "Understanding AI & robotics applications is essential for modern product managers who need to evaluate technical feasibility and drive data-informed roadmaps." },
-      { ...ELECTIVE_COURSES[6], aiReason: "The Analytics Edge builds the data science fluency required to lead cross-functional tech initiatives at scale." },
+      { ...ELECTIVE_COURSES[7], aiReason: "Analytics for a Better World builds the predictive and prescriptive analytics fluency required to lead cross-functional tech initiatives at scale." },
       { ...ELECTIVE_COURSES[9], aiReason: "Quantum computing is an emerging frontier — understanding its business implications positions you ahead of the curve in tech strategy." },
     ],
   },
