@@ -1,7 +1,7 @@
 import { Course, CourseBundle } from "@/types/course";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock } from "lucide-react";
+import { Clock, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo } from "react";
 
@@ -10,6 +10,7 @@ interface CourseCalendarProps {
   selectedElectives: Course[];
   hoveredBundle?: CourseBundle | null;
   onCourseClick?: (course: Course) => void;
+  onOpenSlotClick?: () => void;
   /** Keys of recently-added elective IDs for stagger animation */
   animatingIds?: Set<string>;
 }
@@ -38,6 +39,7 @@ const CourseCalendar = ({
   selectedElectives,
   hoveredBundle,
   onCourseClick,
+  onOpenSlotClick,
   animatingIds,
 }: CourseCalendarProps) => {
   const allCourses = [...requiredCourses, ...selectedElectives];
@@ -167,9 +169,11 @@ const CourseCalendar = ({
                   return (
                     <div
                       key={`${day}-${timeSlot}`}
-                      className="p-2.5 rounded-lg border border-dashed border-border/60 min-h-[80px] flex items-center justify-center"
+                      onClick={() => onOpenSlotClick?.()}
+                      className="group/slot p-2.5 rounded-lg border border-dashed border-border/60 min-h-[80px] flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-[hsl(var(--primary)/0.06)] hover:border-[hsl(var(--primary)/0.25)]"
                     >
-                      <span className="text-xs text-muted-foreground/50">Open</span>
+                      <span className="text-xs text-muted-foreground/50 group-hover/slot:hidden">Open</span>
+                      <Plus className="w-4 h-4 text-primary/40 hidden group-hover/slot:block" />
                     </div>
                   );
                 }

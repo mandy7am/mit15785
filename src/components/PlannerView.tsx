@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ManualCourseModal from "./ManualCourseModal";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   TreePine,
   Calendar,
@@ -310,20 +311,30 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                   ))}
                 </div>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full gap-2 mt-4 border-dashed"
-                  onClick={() => setShowManualModal(true)}
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Courses Manually
-                  {manualCourses.length > 0 && (
-                    <Badge variant="secondary" className="ml-1 px-1.5 py-0 rounded-full h-5 min-w-5 flex items-center justify-center bg-primary/10 text-primary hover:bg-primary/20">
-                      {manualCourses.length}
-                    </Badge>
-                  )}
-                </Button>
+                <TooltipProvider delayDuration={300}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full gap-2 mt-4 border-border bg-transparent"
+                        onClick={() => setShowManualModal(true)}
+                      >
+                        <Plus className="w-4 h-4" />
+                        Add Course{" "}
+                        <span className="relative inline-block px-[3px] py-[1px]" style={{ background: "rgba(217, 255, 0, 0.6)", borderRadius: "2px" }}>Manually</span>
+                        {manualCourses.length > 0 && (
+                          <Badge variant="secondary" className="ml-1 px-1.5 py-0 rounded-full h-5 min-w-5 flex items-center justify-center bg-primary/10 text-primary hover:bg-primary/20">
+                            {manualCourses.length}
+                          </Badge>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-[220px] text-center">
+                      Can't find the right fit? Search the full MIT/Harvard catalog here.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </>
             ) : (
               <>
@@ -377,6 +388,7 @@ const PlannerView = ({ initialProfile, onSwitchProgram }: PlannerViewProps) => {
                 selectedElectives={selectedElectives}
                 hoveredBundle={hoveredBundle}
                 animatingIds={animatingIds}
+                onOpenSlotClick={() => setShowManualModal(true)}
               />
             </Card>
           </main>
